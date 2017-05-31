@@ -1,8 +1,12 @@
 class Sidebar extends Component {
   constructor(containerElement, selectItemCallback) {
     super(containerElement);
-    this._selectItemCallback = selectItemCallback;
-    this.fileElements = [];
+    this._listItems = [];
+    this._selectItemCallback = (file) => {
+      this._listItems.forEach(listItem => listItem.deselect());
+      this._listItems.filter(listItem => file === listItem.getFile())[0].select();
+      selectItemCallback(file);
+    };
   }
 
   setProject(project) {
@@ -21,7 +25,7 @@ class Sidebar extends Component {
     this._project.files.forEach((file) => {
       const itemElement = ListItem.createDomNode();
       const item = new ListItem(itemElement, file, this._selectItemCallback);
-      this.fileElements.push(item);
+      this._listItems.push(item);
       fileTreeElement.appendChild(itemElement);
     })
   }

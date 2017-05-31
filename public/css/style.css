@@ -295,6 +295,10 @@ header button img {
     background-color: #444444;
 }
 
+.list-item.selected {
+    background-color: #444444;
+}
+
 .list-icon {
     margin-right: 5px;
     width: 12px;

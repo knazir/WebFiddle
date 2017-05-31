@@ -4,9 +4,6 @@ class App extends Component {
     this._authBox = new AuthBox(document.querySelector("#auth-box"), this._signinCallback.bind(this));
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
-
-    // Testing
-    this._getUser("knazir");
   }
 
   _signinCallback(event) {
