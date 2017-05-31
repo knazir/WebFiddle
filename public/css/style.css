@@ -11,9 +11,60 @@ body {
 }
 
 #app {
-    height: 100vh;
+    min-height: 100vh;
+    min-width: 100vw;
+    height: 100%;
+    width: 100%;
+
     background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url("../images/bg.jpg") no-repeat center center;
     background-size: cover;
+}
+
+#project-list header {
+    margin-bottom: 20px;
+}
+
+#project-view header {
+    margin-bottom: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+header .logo {
+    margin-left: 5px;
+    padding: 5px;
+    height: 48px;
+}
+
+header button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 10px;
+    height: 42px;
+
+    background-color: lightgray;
+    border: none;
+    font-size: 12pt;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #c0c0c0;
+}
+
+header button img {
+    margin-right: 5px;
+    width: 32px;
+    height: 32px;
 }
 
 .hidden {
@@ -128,4 +179,133 @@ body {
     background: #f8f8f8;
     border-top: rgba(0, 0, 0, 0.05) 1px solid;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+}
+
+
+/* * * * * * * *
+ * ProjectList *
+ * * * * * * * */
+#project-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.projects {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.project-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 20px 10px;
+    padding: 15px;
+    width: 20%;
+    height: 100%;
+
+    background: lightgray;
+    border-top: rgba(0, 0, 0, 0.05) 1px solid;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+
+    cursor: pointer;
+}
+
+.project-tile:hover {
+    background-color: #c0c0c0;
+}
+
+.project-tile h3 {
+    text-align: center;
+}
+
+.project-tile .project-icon {
+    width: 64px;
+    height: 64px;
+}
+
+
+/* * * * * * * * *
+ * Project View  *
+ * * * * * * * * */
+.project {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    border-top: solid 1px black;
+}
+
+/* * * * * *
+ * Sidebar *
+ * * * * * */
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 20%;
+    height: calc(100vh - 63px); /* Offset for header */
+
+    background-color: #333333;
+}
+
+.project-title {
+    padding: 10px;
+    width: 100%;
+
+    font-size: 18pt;
+    font-weight: bold;
+    color: white;
+
+    text-align: center;
+    border-bottom: solid 3px #e54d42;
+}
+
+.file-tree {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
+.list-item {
+    display: flex;
+    align-items: baseline;
+    padding: 5px 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.list-item:hover {
+    background-color: #444444;
+}
+
+.list-icon {
+    margin-right: 5px;
+    width: 12px;
+    height: 12px;
+}
+
+
+/* * * * * *
+ * Editor  *
+ * * * * * */
+#editor {
+    width: 80%;
+    height: calc(100vh - 63px); /* Offset by space from top of page */
 }
