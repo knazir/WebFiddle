@@ -1,3 +1,131 @@
-/**
- * TODO(you): Add the CSS necessary to complete your final project.
- **/
+/* * * * * *
+ * Global  *
+ * * * * * */
+div {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#app {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url("../images/bg.jpg") no-repeat center center;
+    background-size: cover;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* * * * * *
+ * AuthBox *
+ * * * * * */
+#auth-box {
+    display: flex;
+    justify-content: center;
+    padding-top: 125px;
+    height: 100%;
+}
+
+#auth-box .logo {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100px;
+    height: 100px;
+}
+
+#auth-box .form-link {
+    margin-top: 15px;
+}
+
+#auth-box .form-link a {
+    color: #0000ac;
+    cursor: pointer;
+}
+
+#auth-box .form-link a:hover {
+    text-decoration: underline;
+}
+
+
+#auth-box form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 10px;
+    width: 100%;
+}
+
+#auth-box form .submit-button {
+    margin-top: 20px;
+    padding: 5px 0;
+    font-size: 16pt;
+    width: 60%;
+
+    color: white;
+    background-color: #f93975;
+
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.input-field {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+
+    margin: 10px;
+    padding-bottom: 10px;
+    width: 80%;
+
+    border-bottom: solid 1px lightgray;
+}
+
+.input-field .form-icon {
+    margin-left: 10px;
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+}
+
+.input-field input {
+    width: calc(100% - 35px);
+    height: 100%;
+    font-size: 14pt;
+    background-color: transparent;
+    border: none;
+}
+
+.input-field input:focus {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+#signin.credential-box {
+    height: 365px;
+}
+
+#signup.credential-box {
+    height: 420px;
+}
+
+.credential-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 400px;
+
+    background: #f8f8f8;
+    border-top: rgba(0, 0, 0, 0.05) 1px solid;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+}

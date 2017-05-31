@@ -9,10 +9,11 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "mongodb": "^2.2.27"
+    "mongodb": "^2.2.27",
+    "nodemon": "^1.11.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "CS193X Student",

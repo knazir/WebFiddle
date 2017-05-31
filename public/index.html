@@ -1,14 +1,78 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Metadata -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>CS193x Final Project</title>
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/style.css"/>
-    <script src="/js/script.js" defer></script>
-    </script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="./js/component.js" defer></script>
+
+    <script src="./js/signup.js" defer></script>
+    <script src="./js/signin.js" defer></script>
+    <script src="./js/auth-box.js" defer></script>
+
+    <script src="./js/project-list.js" defer></script>
+
+    <script src="./js/project-view.js" defer></script>
+
+    <script src="./js/app.js" defer></script>
+    <script src="./js/script.js" defer></script>
   </head>
   <body>
-    <!-- TODO(you): Add the HTML necessary to complete your final project. -->
+
+  <div id="app">
+
+    <!-- Authorization -->
+    <div id="auth-box">
+      <div id="signin" class="credential-box">
+        <img class="logo" src="./images/logo.png" />
+        <form>
+          <div class="input-field">
+            <img class="form-icon" src="./images/user.png" />
+            <input type="text" name="username" placeholder="Username"/>
+          </div>
+          <div class="input-field">
+            <img class="form-icon" src="./images/password.png" />
+            <input type="password" name="password" placeholder="Password"/>
+          </div>
+          <button class="submit-button">Log In</button>
+        </form>
+        <div class="form-link">Need an account? <a>Sign Up.</a></div>
+      </div>
+      <div id="signup" class="credential-box hidden">
+        <img class="logo" src="./images/logo.png" />
+        <form>
+          <div class="input-field">
+            <img class="form-icon" src="./images/user.png" />
+            <input type="text" name="username" placeholder="Username"/>
+          </div>
+          <div class="input-field">
+            <img class="form-icon" src="./images/password.png" />
+            <input type="password" name="password" placeholder="Password"/>
+          </div>
+          <div class="input-field">
+            <img class="form-icon" src="./images/email.png" />
+            <input type="email" name="email" placeholder="Email"/>
+          </div>
+          <button class="submit-button">Sign Up</button>
+        </form>
+        <div class="form-link">Already have an account? <a>Log In.</a></div>
+      </div>
+    </div>
+
+    <!-- Project List -->
+    <div id="project-list" class="hidden"></div>
+
+    <!-- Project View -->
+    <div id="project-view" class="hidden"></div>
+
+  </div>
+
   </body>
 </html>
