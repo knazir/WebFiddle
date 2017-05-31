@@ -54,6 +54,7 @@ header button {
     background-color: lightgray;
     border: none;
     font-size: 12pt;
+    outline: none;
     cursor: pointer;
 }
 

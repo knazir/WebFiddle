@@ -1,7 +1,14 @@
 class Editor extends Component {
   constructor(containerElement) {
     super(containerElement);
-    this._createEditor();
+
+    this._file = {};
+    this._editor = this._createEditor();
+  }
+
+  reset() {
+    this._file = {};
+    this._editor.setValue("");
   }
 
   setFile(file) {
@@ -10,16 +17,17 @@ class Editor extends Component {
   }
 
   _createEditor() {
-    this._editor = ace.edit("editor");
-    this._editor.setTheme("ace/theme/monokai");
-    this._editor.getSession().setMode(this._getEditorMode());
-    this._editor.getSession().setUseWrapMode(true);
-    this._editor.getSession().setUseSoftTabs(true);
-    this._editor.getSession().setTabSize(4);
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode(this._getEditorMode());
+    editor.getSession().setUseWrapMode(true);
+    editor.getSession().setUseSoftTabs(true);
+    editor.getSession().setTabSize(4);
+    return editor;
   }
 
   _getEditorMode() {
-    if (!this._file) return "ace/mode/text";
+    if (!this._file.filename) return "ace/mode/text";
 
     const fileExtension = this._file.filename.substring(this._file.filename.lastIndexOf("."));
     switch(fileExtension) {

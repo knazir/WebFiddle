@@ -1,6 +1,7 @@
 class App extends Component {
   constructor(containerElement) {
     super(containerElement);
+
     this._authBox = new AuthBox(document.querySelector("#auth-box"), this._signinCallback.bind(this));
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
