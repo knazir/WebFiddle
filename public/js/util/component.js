@@ -1,13 +1,17 @@
 class Component {
   constructor(containerElement) {
-    this.containerElement = containerElement;
+    this._containerElement = containerElement;
+  }
+
+  getContainerElement() {
+    return this._containerElement;
   }
 
   show() {
-    this.containerElement.classList.remove("hidden");
+    this._containerElement.classList.remove("hidden");
   }
 
   hide() {
-    this.containerElement.classList.add("hidden");
+    this._containerElement.classList.add("hidden");
   }
 }

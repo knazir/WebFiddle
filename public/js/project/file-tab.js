@@ -5,16 +5,12 @@ class FileTab extends Component {
     this._file = file;
     this._isSelected = false;
 
-    this.containerElement.addEventListener("click", selectFileCallback);
-    this.containerElement.querySelector(".filename").textContent = file.filename;
-    this.containerElement.querySelector(".close-button").addEventListener("click", (event) => {
+    this._containerElement.addEventListener("click", selectFileCallback);
+    this._containerElement.querySelector(".filename").textContent = file.filename;
+    this._containerElement.querySelector(".close-button").addEventListener("click", (event) => {
       event.stopPropagation();
       closeFileCallback();
     });
-  }
-
-  getContainerElement() {
-    return this.containerElement;
   }
 
   getFile() {
@@ -23,12 +19,12 @@ class FileTab extends Component {
 
   select() {
     this._isSelected = true;
-    this.containerElement.classList.add("selected");
+    this._containerElement.classList.add("selected");
   }
 
   deselect() {
     this._isSelected = false;
-    this.containerElement.classList.remove("selected");
+    this._containerElement.classList.remove("selected");
   }
 
   isSelected() {

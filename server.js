@@ -1,18 +1,28 @@
-const bodyParser = require('body-parser');
-const express = require('express');
-const router = express.Router();
+const bodyParser = require("body-parser");
+const express = require("express");
+const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
+const mime = require("mime"); // For determining MIME type of project files
 
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
+const MongoClient = require("mongodb").MongoClient;
+const ObjectID = require("mongodb").ObjectID;
 
 const app = express();
 const jsonParser = bodyParser.json();
 
-app.use(express.static('public'));
+app.enable("strict routing");
+app.use(express.static("public"));
+app.use(jsonParser);
+
+const router = express.Router({
+  strict: app.get("strict routing")
+});
+
+app.use(router);
+app.use(slash());
 
 let db = null;
 async function main() {
-  const DATABASE_NAME = 'cs193x-db';
+  const DATABASE_NAME = "cs193x-db";
   const MONGO_URL = `mongodb://localhost:27017/${DATABASE_NAME}`;
 
   // The "process.env.MONGODB_URI" is needed to work with Heroku.
@@ -28,8 +38,6 @@ main();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.use(jsonParser);
-
 const PROJECTS = [
   {
     id: 1,
@@ -40,7 +48,7 @@ const PROJECTS = [
     files: [
       {
         id: `1_1`,
-        type: "file",
+        type: "html",
         filename: "index.html",
         contents: ""
       }
@@ -55,13 +63,13 @@ const PROJECTS = [
     files: [
       {
         id: `2_1`,
-        type: "file",
+        type: "html",
         filename: "index.html",
         contents: ""
       },
       {
         id: `2_2`,
-        type: "file",
+        type: "js",
         filename: "app.js",
         contents: ""
       }
@@ -76,13 +84,13 @@ const PROJECTS = [
     files: [
       {
         id: `3_1`,
-        type: "file",
+        type: "html",
         filename: "index.html",
         contents: ""
       },
       {
         id: `3_2`,
-        type: "file",
+        type: "css",
         filename: "main.css",
         contents: ""
       }
@@ -97,19 +105,19 @@ const PROJECTS = [
     files: [
       {
         id: `4_1`,
-        type: "file",
+        type: "html",
         filename: "index.html",
         contents: ""
       },
       {
         id: `4_2`,
-        type: "file",
+        type: "js",
         filename: "app.js",
         contents: ""
       },
       {
         id: `4_3`,
-        type: "file",
+        type: "css",
         filename: "main.css",
         contents: ""
       }
@@ -124,73 +132,73 @@ const PROJECTS = [
     files: [
       {
         id: `5_1`,
-        type: "file",
+        type: "html",
         filename: "index.html",
         contents: ""
       },
       {
         id: `5_2`,
-        type: "file",
+        type: "js",
         filename: "app.js",
         contents: ""
       },
       {
         id: `5_3`,
-        type: "file",
+        type: "css",
         filename: "main.css",
         contents: ""
       },
       {
         id: `5_4`,
-        type: "file",
+        type: "js",
         filename: "a.js",
         contents: ""
       },
       {
         id: `5_5`,
-        type: "file",
+        type: "js",
         filename: "b.js",
         contents: ""
       },
       {
         id: `5_6`,
-        type: "file",
+        type: "js",
         filename: "c.js",
         contents: ""
       },
       {
         id: `5_7`,
-        type: "file",
+        type: "js",
         filename: "d.js",
         contents: ""
       },
       {
         id: `5_8`,
-        type: "file",
+        type: "js",
         filename: "reallylongfilenameofdoomandstuff.js",
         contents: ""
       },
       {
         id: `5_8`,
-        type: "file",
+        type: "html",
         filename: "maple.html",
         contents: ""
       },
       {
         id: `5_8`,
-        type: "file",
+        type: "css",
         filename: "tomatosauce.css",
         contents: ""
       },
       {
         id: `5_8`,
-        type: "file",
+        type: "js",
         filename: "duck.js",
         contents: ""
       },
       {
         id: `5_8`,
-        type: "file",
+        type: "js",
         filename: "ace.js",
         contents: ""
       }
@@ -201,9 +209,8 @@ const PROJECTS = [
 /*
  * Get a user object. This user has a brief summary of all their projects
  * without the actual file contents.
- * TODO: Make passwords more secure...
  */
-router.get("/users/:username/:password", function(req, res) {
+router.get("/users/:username", function(req, res) {
   const projects = PROJECTS.map((project) => {
     const result = {};
     for (const key of Object.keys(project)) {
@@ -225,28 +232,54 @@ router.get("/users/:username/:password", function(req, res) {
  */
 router.get("/users/:username/projects/:projectId", function(req, res) {
   const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) res.status(404).send("Not found.");
-  else res.json(project);
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+  res.json(project);
 });
 
 /*
- * Get a single file from a specific project.
+ * Get a single file from a project by its ID.
  */
-router.get("/users/:username/project/:projectId/files/:fileId", function(req, res) {
+router.get("/users/:username/projects/:projectId/files/:fileId", function(req, res) {
+  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
 
+  let file = project.files.filter((file) => file.id === req.params.fileId)[0];
+  if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
+
+  res.json(file);
 });
 
+// TODO: Change POST requests to PATCH where appropriate
+
 /*
- * Update the contents of a file for a specific project.
+ * Update the contents of a file for a project.
  */
 router.post("/users/:username/projects/:projectId/files/:fileId/update", function(req, res) {
   const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(404).json({response: `Not found: ${req.params.projectId}`});
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
 
   const file = project.files.filter((file) => file.id === req.params.fileId)[0];
-  if (!file) return res.status(404).json({response: `Not found: ${req.params.fileId}`});
+  if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
 
   file.contents = req.body.contents;
+  res.json({response: "Success"});
+});
+
+/*
+ * Toggle a project's published status.
+ */
+router.post("/users/:username/projects/:projectId/publish/:setting", function(req, res) {
+  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+
+  if (req.params.setting === "toggle") {
+    project.published = !project.published;
+  } else if (req.params.setting === "true") {
+    project.published = true;
+  } else if (req.params.setting === "false") {
+    project.published = false;
+  }
+
   res.json({response: "Success"});
 });
 
@@ -256,24 +289,23 @@ router.post("/users/:username/projects/:projectId/files/:fileId/update", functio
  * * * * * * * * */
 function getProjectFile(req, res, preview) {
   const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project.published && !preview) return res.status(404).send("Not found.");
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+  if (!project.published && !preview) return res.status(400).json({response: `Not found: Project not published.`});
 
   const filename = req.params.filename || "index.html";
   const file = project.files.filter((file) => file.filename === filename)[0];
-  if (!file) return res.status(404).json({response: `Not found: ${filename}`});
+  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
 
+  const type = mime.lookup(filename);
+  res.setHeader("Content-Type", type);
   res.send(file.contents);
 }
 
-router.get("/view/:username/:projectId/:filename?", function(req, res) {
+router.get("/view/:username/:projectId/:filename?/", function(req, res) {
   getProjectFile(req, res, false);
 });
 
-router.get("/preview/:username/:projectId", function(req, res) {
+router.get("/preview/:username/:projectId/:filename?/", function(req, res) {
   getProjectFile(req, res, true);
 });
-
-
-app.use(router);
-
 

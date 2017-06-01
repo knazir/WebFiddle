@@ -1,12 +1,14 @@
 class Editor extends Component {
-  constructor(containerElement, selectSidebarFileCallback, deselectSidebarFilesCallback) {
+  constructor(containerElement, selectSidebarFileCallback, deselectSidebarFilesCallback, updateLivePreviewCallback) {
     super(containerElement);
 
     this._user = {};
     this._project = {};
     this._file = {};
+    this._fresh = true;
+    this._lastFetchedFile = null;
     this._editor = this._createEditor();
-
+    this._updateLivePreviewCallback = updateLivePreviewCallback;
     this._fileBar = new FileBar(containerElement.querySelector("#file-bar"), this.setFile.bind(this),
       selectSidebarFileCallback, deselectSidebarFilesCallback);
   }
@@ -14,8 +16,14 @@ class Editor extends Component {
   reset() {
     this._project = {};
     this._file = {};
+    this._fresh = true;
     this._fileBar.reset();
     this._editor.setValue("Select or create a new file!", 1);
+  }
+
+  resize(showPreview) {
+    this._containerElement.style.width = showPreview ? "40%" : "";
+    this._editor.resize();
   }
 
   setUser(user) {
@@ -26,14 +34,25 @@ class Editor extends Component {
     this._project = project;
   }
 
-  setFile(file, updateFileBar) {
-    this._file = file;
-    if (updateFileBar) this._fileBar.setFile(file);
-    this._editor.getSession().setMode(this._getEditorMode());
-    this._editor.setValue(file.contents, -1);
-    this._editor.setReadOnly(false);
-    this._editor.renderer.$cursorLayer.element.classList.remove("hidden");
-    this._editor.resize();
+  async setFile(file, updateFileBar) {
+    // Make sure changes to this file are done
+    if (!_.isEmpty(this._file) && !this._fresh && file.id !== this._lastFetchedFile) {
+      await Api.updateFile(this._user.username, this._project.id, this._file.id, this._editor.getValue());
+    }
+
+    // Ensure we have the latest version
+    Api.getFile(this._user.username, this._project.id, file.id, (latestFile) => {
+      this._fresh = false;
+      this._lastFetchedFile = latestFile.id;
+      this._file = latestFile;
+      if (updateFileBar) this._fileBar.setFile(latestFile);
+      this._editor.getSession().setMode(this._getEditorMode());
+      this._editor.setValue(latestFile.contents, -1);
+      this._editor.setReadOnly(false);
+      this._editor.renderer.$cursorLayer.element.classList.remove("hidden");
+      this._editor.resize();
+      this._editor.focus();
+    });
   }
 
   clearEditor() {
@@ -57,8 +76,10 @@ class Editor extends Component {
 
   _onEditorChange(event) {
     if ((event.action !== "insert" && event.action !== "remove") || !this._file.id) return;
-    this._file.contents = this._editor.getValue();
-    Api.updateFile(this._user.username, this._project.id, this._file.id, this._editor.getValue());
+    const newContents = this._editor.getValue();
+    this._file.contents = newContents;
+    this._updateLivePreviewCallback();
+    Api.updateFile(this._user.username, this._project.id, this._file.id, newContents);
   }
 
   _getEditorMode() {

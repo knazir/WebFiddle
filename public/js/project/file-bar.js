@@ -10,17 +10,17 @@ class FileBar extends Component {
 
   reset() {
     this._fileTabs = [];
-    this.containerElement.innerHTML = "";
+    this._containerElement.innerHTML = "";
   }
 
   setFile(file) {
-    let fileTab = this._fileTabs.filter(fileTab => fileTab.getFile() === file)[0];
+    let fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0];
 
     if (!fileTab) {
       const fileTabElement = FileTab.createDomNode();
       fileTab = new FileTab(fileTabElement, file, () => this._selectFileTab(file), () => this._closeFileTab(file));
       this._fileTabs.push(fileTab);
-      this.containerElement.appendChild(fileTab.getContainerElement());
+      this._containerElement.appendChild(fileTab.getContainerElement());
     }
 
     this._selectFileTab(file);
@@ -30,21 +30,21 @@ class FileBar extends Component {
     this._selectFileEditorFileCallback(file, false);
     this._selectSidebarFileCallback(file);
     this._fileTabs.forEach(fileTab => fileTab.deselect());
-    this._fileTabs.filter(fileTab => fileTab.getFile() === file)[0].select();
+    this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0].select();
   }
 
   _closeFileTab(file) {
     let fileTabIndex = -1;
     for (let i = 0; i < this._fileTabs.length; i++) {
       const fileTab = this._fileTabs[i];
-      if (fileTab.getFile() === file) {
+      if (fileTab.getFile().id === file.id) {
         fileTabIndex = i;
         break;
       }
     }
 
     const fileTab = this._fileTabs[fileTabIndex];
-    this.containerElement.removeChild(fileTab.getContainerElement());
+    this._containerElement.removeChild(fileTab.getContainerElement());
     this._fileTabs.splice(fileTabIndex, 1);
 
     // Deleting tab that's not selected, don't change current selection

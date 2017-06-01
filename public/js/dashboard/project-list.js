@@ -5,13 +5,12 @@ class ProjectList extends Component {
     this._user = {};
     this._projects = [];
 
-    this._projectsElement = this.containerElement.querySelector(".projects");
+    this._projectsElement = this._containerElement.querySelector(".projects");
 
     this._selectProjectCallback = selectProjectCallback;
   }
 
   reset() {
-    this._user = {};
     this._projects = [];
     this._projectsElement.innerHTML = "";
   }

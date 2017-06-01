@@ -12,11 +12,11 @@ class ListItem extends Component {
   }
 
   select() {
-    this.containerElement.classList.add("selected");
+    this._containerElement.classList.add("selected");
   }
 
   deselect() {
-    this.containerElement.classList.remove("selected");
+    this._containerElement.classList.remove("selected");
   }
 
   _getIconImage(file) {

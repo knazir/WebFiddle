@@ -6,7 +6,7 @@ class Sidebar extends Component {
     this._listItems = [];
 
     this._titleElement = containerElement.querySelector(".project-title");
-    this._fileTreeElement = this.containerElement.querySelector(".file-tree");
+    this._fileTreeElement = this._containerElement.querySelector(".file-tree");
 
     this._selectEditorFileCallback = (file) => {
       this.setFile(file);
@@ -16,7 +16,7 @@ class Sidebar extends Component {
 
   setFile(file) {
     this.deselectAll();
-    this._listItems.filter(listItem => file === listItem.getFile())[0].select();
+    this._listItems.filter(listItem => file.id === listItem.getFile().id)[0].select();
   }
 
   deselectAll() {

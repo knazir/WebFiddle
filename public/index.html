@@ -35,7 +35,9 @@
     <script type="text/javascript" src="js/project/toolbar.js" defer></script>
     <script type="text/javascript" src="js/project/file-tab.js" defer></script>
     <script type="text/javascript" src="js/project/file-bar.js" defer></script>
+    <script type="text/javascript" src="js/project/live-preview.js" defer></script>
     <script type="text/javascript" src="js/project/editor.js" defer></script>
+    <script type="text/javascript" src="js/project/project-header.js" defer></script>
     <script type="text/javascript" src="js/project/project-view.js" defer></script>
 
     <!-- Main -->
@@ -85,7 +87,7 @@
 
     <!-- Project List -->
     <div id="project-list" class="hidden">
-      <header>
+      <header id="dashboard-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <button class="new-project"><img src="./images/new_project.png" /> New Project</button>
       </header>
@@ -94,8 +96,9 @@
 
     <!-- Project View -->
     <div id="project-view" class="hidden">
-      <header>
+      <header id="project-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
+        <span class="live-preview-header-item"><input id="live-preview-toggle" type="checkbox" />Live Preview</span>
       </header>
 
       <div class="project">
@@ -107,7 +110,9 @@
           <div id="file-bar"></div>
           <div id="editor"></div>
         </div>
-        <div id="live-preview" class="hidden"></div>
+        <div id="live-preview" class="hidden">
+          <iframe id="preview-frame"></iframe>
+        </div>
       </div>
     </div>
 

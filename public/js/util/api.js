@@ -31,16 +31,23 @@ class Api {
    * TODO: Be more secure about passwords...
    */
   static getUser(username, password, onSuccess, onFailure) {
-    return Api._get(`/users/${username}/${password}`, onSuccess, onFailure);
+    return Api._get(`/users/${username}`, onSuccess, onFailure);
   }
 
   static getProject(username, projectId, onSuccess, onFailure) {
     return Api._get(`/users/${username}/projects/${projectId}`, onSuccess, onFailure);
   }
 
+  static getFile(username, projectId, fileId, onSuccess, onFailure) {
+    return Api._get(`/users/${username}/projects/${projectId}/files/${fileId}`, onSuccess, onFailure);
+  }
 
   static updateFile(username, projectId, fileId, fileContents, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/${projectId}/files/${fileId}/update`, onSuccess, onFailure,
       {contents: fileContents});
+  }
+
+  static toggleProjectPublished(username, projectId, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${projectId}/publish/toggle`, onSuccess, onFailure);
   }
 }
