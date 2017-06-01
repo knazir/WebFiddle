@@ -42,12 +42,12 @@ class Api {
     return Api._get(`/users/${username}/projects/${projectId}/files/${fileId}`, onSuccess, onFailure);
   }
 
-  static updateFile(username, projectId, fileId, fileContents, onSuccess, onFailure) {
+  static updateFile(username, projectId, fileId, contents, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/${projectId}/files/${fileId}/update`, onSuccess, onFailure,
-      {contents: fileContents});
+      { contents });
   }
 
-  static toggleProjectPublished(username, projectId, onSuccess, onFailure) {
-    return Api._post(`/users/${username}/projects/${projectId}/publish/toggle`, onSuccess, onFailure);
+  static setProjectPublished(username, projectId, published, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${projectId}/publish`, onSuccess, onFailure, { published });
   }
 }

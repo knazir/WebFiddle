@@ -4,10 +4,9 @@ class ProjectList extends Component {
 
     this._user = {};
     this._projects = [];
+    this._selectProjectCallback = selectProjectCallback;
 
     this._projectsElement = this._containerElement.querySelector(".projects");
-
-    this._selectProjectCallback = selectProjectCallback;
   }
 
   reset() {

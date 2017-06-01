@@ -4,8 +4,18 @@ class LivePreview extends Component {
 
     this._user = {};
     this._project = {};
+    this._file = {};
     this._visible = false;
+    this._previewTitle = containerElement.querySelector("#live-preview-title");
     this._previewFrame = containerElement.querySelector("#preview-frame");
+  }
+
+  reset() {
+    this._project = {};
+    this._file = {};
+    this.setVisibility(false);
+    this._previewTitle.innerHTML = "";
+    this._previewFrame.src = "";
   }
 
   setUser(user) {
@@ -18,16 +28,9 @@ class LivePreview extends Component {
     this._trySetup();
   }
 
-  _trySetup() {
-    if (!_.isEmpty(this._user) && !_.isEmpty(this._project) && this._visible) {
-      this._previewFrame.src = `/preview/${this._user.username}/${this._project.id}`;
-    }
-  }
-
-  reset() {
-    this._project = {};
-    this.setVisibility(false);
-    this._previewFrame.src = "";
+  setFile(file) {
+    this._file = file;
+    this._trySetup();
   }
 
   setVisibility(show) {
@@ -37,10 +40,36 @@ class LivePreview extends Component {
       this._trySetup();
     } else {
       this.hide();
+      this._previewFrame.src = "";
     }
   }
 
   refreshContents() {
     this._previewFrame.contentWindow.location.reload();
+  }
+
+  getPreviewURL() {
+    let url = `/preview/${this._user.username}/${this._project.id}`;
+    if (this._file.type === "html" && this._file.filename !== "index.html") url += `/${this._file.filename}`;
+    return url;
+  }
+
+  getShareableURL() {
+    return `${window.location.origin}/view/${this._user.username}/${this._project.id}`;
+  }
+
+  _trySetup() {
+    if (!_.isEmpty(this._user) && !_.isEmpty(this._project) && this._visible) {
+      let src = `/preview/${this._user.username}/${this._project.id}`;
+      let filename = "index.html";
+
+      if (this._file.type === "html" && this._file.filename !== "index.html") {
+        src += `/${this._file.filename}`;
+        filename = this._file.filename;
+      }
+
+      this._previewTitle.textContent = filename;
+      this._previewFrame.src = src;
+    }
   }
 }

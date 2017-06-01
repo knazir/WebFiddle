@@ -179,25 +179,25 @@ const PROJECTS = [
         contents: ""
       },
       {
-        id: `5_8`,
+        id: `5_9`,
         type: "html",
         filename: "maple.html",
         contents: ""
       },
       {
-        id: `5_8`,
+        id: `5_10`,
         type: "css",
         filename: "tomatosauce.css",
         contents: ""
       },
       {
-        id: `5_8`,
+        id: `5_11`,
         type: "js",
         filename: "duck.js",
         contents: ""
       },
       {
-        id: `5_8`,
+        id: `5_12`,
         type: "js",
         filename: "ace.js",
         contents: ""
@@ -266,20 +266,12 @@ router.post("/users/:username/projects/:projectId/files/:fileId/update", functio
 });
 
 /*
- * Toggle a project's published status.
+ * Set a project's published status.
  */
-router.post("/users/:username/projects/:projectId/publish/:setting", function(req, res) {
+router.post("/users/:username/projects/:projectId/publish", function(req, res) {
   const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
   if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
-
-  if (req.params.setting === "toggle") {
-    project.published = !project.published;
-  } else if (req.params.setting === "true") {
-    project.published = true;
-  } else if (req.params.setting === "false") {
-    project.published = false;
-  }
-
+  project.published = req.body.published;
   res.json({response: "Success"});
 });
 

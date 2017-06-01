@@ -29,14 +29,18 @@
     <script type="text/javascript" src="js/dashboard/project-tile.js" defer></script>
     <script type="text/javascript" src="js/dashboard/project-list.js" defer></script>
 
+    <!-- Sidebar -->
+    <script type="text/javascript" src="js/sidebar/list-item.js" defer></script>
+    <script type="text/javascript" src="js/sidebar/sidebar.js" defer></script>
+
+    <!-- Editor -->
+    <script type="text/javascript" src="js/editor/file-tab.js" defer></script>
+    <script type="text/javascript" src="js/editor/file-bar.js" defer></script>
+
     <!-- Project -->
-    <script type="text/javascript" src="js/project/list-item.js" defer></script>
-    <script type="text/javascript" src="js/project/sidebar.js" defer></script>
-    <script type="text/javascript" src="js/project/toolbar.js" defer></script>
-    <script type="text/javascript" src="js/project/file-tab.js" defer></script>
-    <script type="text/javascript" src="js/project/file-bar.js" defer></script>
     <script type="text/javascript" src="js/project/live-preview.js" defer></script>
-    <script type="text/javascript" src="js/project/editor.js" defer></script>
+    <script type="text/javascript" src="js/editor/editor.js" defer></script>
+    <script type="text/javascript" src="js/project/checkbox-item.js" defer></script>
     <script type="text/javascript" src="js/project/project-header.js" defer></script>
     <script type="text/javascript" src="js/project/project-view.js" defer></script>
 
@@ -98,7 +102,19 @@
     <div id="project-view" class="hidden">
       <header id="project-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
-        <span class="live-preview-header-item"><input id="live-preview-toggle" type="checkbox" />Live Preview</span>
+        <div class="header-options">
+          <span id="line-wrap-toggle" class="checkbox-header-item">
+            <input type="checkbox" checked />Wrap Lines
+          </span>
+          <span id="live-preview-toggle" class="checkbox-header-item">
+            <input type="checkbox" />Split View
+          </span>
+          <button id="full-preview-button">Preview</button>
+          <span id="published-toggle" class="checkbox-header-item">
+            <input type="checkbox" />Published
+          </span>
+          <button id="share">Share</button>
+        </div>
       </header>
 
       <div class="project">
@@ -111,6 +127,7 @@
           <div id="editor"></div>
         </div>
         <div id="live-preview" class="hidden">
+          <div id="live-preview-title"></div>
           <iframe id="preview-frame"></iframe>
         </div>
       </div>

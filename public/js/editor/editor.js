@@ -60,6 +60,11 @@ class Editor extends Component {
     this._editor.setReadOnly(true);
   }
 
+  setLineWrap(wrap) {
+    this._editor.getSession().setUseWrapMode(wrap);
+    this._editor.resize();
+  }
+
   _createEditor() {
     const editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
