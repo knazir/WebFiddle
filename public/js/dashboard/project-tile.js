@@ -14,7 +14,7 @@ class ProjectTile extends Component {
   /* Creates the following DOM element:
    *   <div class="project-tile">
    *     <img class="project-icon" src="images/project_folder.png" />
-   *     <h3>TITLE</h2>
+   *     <h3></h3>
    *   </div>
    */
   static createDomNode() {

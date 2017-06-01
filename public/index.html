@@ -12,24 +12,33 @@
 
     <!-- Libraries -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
 
     <!-- Scripts -->
+
+    <!-- Util -->
     <script type="text/javascript" src="js/util/api.js" defer></script>
     <script type="text/javascript" src="js/util/component.js" defer></script>
 
+    <!-- Auth -->
     <script type="text/javascript" src="js/auth/signup.js" defer></script>
     <script type="text/javascript" src="js/auth/signin.js" defer></script>
     <script type="text/javascript" src="js/auth/auth-box.js" defer></script>
 
+    <!-- Dashboard -->
     <script type="text/javascript" src="js/dashboard/project-tile.js" defer></script>
     <script type="text/javascript" src="js/dashboard/project-list.js" defer></script>
 
+    <!-- Project -->
     <script type="text/javascript" src="js/project/list-item.js" defer></script>
     <script type="text/javascript" src="js/project/sidebar.js" defer></script>
     <script type="text/javascript" src="js/project/toolbar.js" defer></script>
+    <script type="text/javascript" src="js/project/file-tab.js" defer></script>
+    <script type="text/javascript" src="js/project/file-bar.js" defer></script>
     <script type="text/javascript" src="js/project/editor.js" defer></script>
     <script type="text/javascript" src="js/project/project-view.js" defer></script>
 
+    <!-- Main -->
     <script type="text/javascript" src="./js/app.js" defer></script>
     <script type="text/javascript" src="./js/script.js" defer></script>
   </head>
@@ -94,7 +103,10 @@
           <div class="project-title"></div>
           <div class="file-tree"></div>
         </div>
-        <div id="editor"></div>
+        <div id="editor-area">
+          <div id="file-bar"></div>
+          <div id="editor"></div>
+        </div>
         <div id="live-preview" class="hidden"></div>
       </div>
     </div>

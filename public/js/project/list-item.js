@@ -1,8 +1,8 @@
 class ListItem extends Component {
-  constructor(containerElement, file, selectItemCallback) {
+  constructor(containerElement, file, selectEditorFileCallback) {
     super(containerElement);
     this._file = file;
-    containerElement.addEventListener("click", () => selectItemCallback(file));
+    containerElement.addEventListener("click", () => selectEditorFileCallback(file));
     containerElement.querySelector("img").src = this._getIconImage(file);
     containerElement.querySelector(".filename").textContent = file.filename;
   }
@@ -30,6 +30,12 @@ class ListItem extends Component {
     }
   }
 
+  /* Creates the following DOM element:
+   *   <div class="list-item">
+   *     <img class="list-icon" />
+   *     <span class="filename"></span>
+   *   </div>
+   */
   static createDomNode() {
     const element = document.createElement("div");
     element.classList.add("list-item");

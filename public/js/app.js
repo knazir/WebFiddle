@@ -5,6 +5,8 @@ class App extends Component {
     this._authBox = new AuthBox(document.querySelector("#auth-box"), this._signinCallback.bind(this));
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
+
+    this._getUser("knazir");
   }
 
   _signinCallback(event) {
@@ -20,6 +22,7 @@ class App extends Component {
     Api.getUser(username, password, (user) => {
       this._user = user;
       this._projectList.setUser(user);
+      this._projectView.setUser(user);
       this._authBox.hide();
       this._projectList.show();
     });
@@ -27,8 +30,7 @@ class App extends Component {
 
   _selectProjectCallback(project) {
     this._projectView.reset();
-
-    Api.getProject(this._user.username, project.name, (project) => {
+    Api.getProject(this._user.username, project.id, (project) => {
       this._project = project;
       this._projectView.setProject(project);
       this._projectList.hide();

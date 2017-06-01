@@ -1,5 +1,5 @@
 class Sidebar extends Component {
-  constructor(containerElement, selectItemCallback) {
+  constructor(containerElement, selectEditorFileCallback) {
     super(containerElement);
 
     this._project = {};
@@ -8,11 +8,19 @@ class Sidebar extends Component {
     this._titleElement = containerElement.querySelector(".project-title");
     this._fileTreeElement = this.containerElement.querySelector(".file-tree");
 
-    this._selectItemCallback = (file) => {
-      this._listItems.forEach(listItem => listItem.deselect());
-      this._listItems.filter(listItem => file === listItem.getFile())[0].select();
-      selectItemCallback(file);
+    this._selectEditorFileCallback = (file) => {
+      this.setFile(file);
+      selectEditorFileCallback(file);
     };
+  }
+
+  setFile(file) {
+    this.deselectAll();
+    this._listItems.filter(listItem => file === listItem.getFile())[0].select();
+  }
+
+  deselectAll() {
+    this._listItems.forEach(listItem => listItem.deselect());
   }
 
   reset() {
@@ -35,7 +43,7 @@ class Sidebar extends Component {
   _fillFileTree() {
     this._project.files.forEach((file) => {
       const itemElement = ListItem.createDomNode();
-      const item = new ListItem(itemElement, file, this._selectItemCallback);
+      const item = new ListItem(itemElement, file, this._selectEditorFileCallback);
       this._listItems.push(item);
       this._fileTreeElement.appendChild(itemElement);
     })

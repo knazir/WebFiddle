@@ -210,7 +210,7 @@ header button img {
 
     margin: 20px 10px;
     padding: 15px;
-    width: 20%;
+    width: 18%;
     height: 100%;
 
     background: lightgray;
@@ -259,6 +259,7 @@ header button img {
     height: calc(100vh - 63px); /* Offset for header */
 
     background-color: #333333;
+    border-right: solid 2px #313131;
 }
 
 .project-title {
@@ -289,15 +290,19 @@ header button img {
     align-items: baseline;
     padding: 5px 10px;
     width: 100%;
+    overflow: scroll; /* Buggy on Chrome (icon disappears until window resized) */
     cursor: pointer;
 }
 
-.list-item:hover {
-    background-color: #444444;
+/*
+ * TODO: Figure out why this is buggy in Chrome only
+ */
+.list-item.selected {
+    /*background-color: #444444;*/
 }
 
-.list-item.selected {
-    background-color: #444444;
+.list-item:hover {
+    /*background-color: #444444;*/
 }
 
 .list-icon {
@@ -310,7 +315,61 @@ header button img {
 /* * * * * *
  * Editor  *
  * * * * * */
-#editor {
+#editor-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
     width: 80%;
     height: calc(100vh - 63px); /* Offset by space from top of page */
+    border-left: solid 4px #333333;
+}
+
+#file-bar {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    background-color: #222222;
+    overflow: scroll;
+}
+
+.file-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 10px;
+
+    min-width: 100px;
+    width: 150px;
+    height: 50px;
+    overflow: hidden;
+
+    font-size: 10pt;
+    color: #a6a6a6;
+    background-color: #333333;
+    border-bottom: solid 3px #222222;
+    border-right: solid 1px #222222;
+    cursor: pointer;
+}
+
+.file-tab.selected {
+    color: white;
+    background-color: #313131;
+    border-bottom: solid 3px #e54d42;
+}
+
+.file-tab:hover {
+    color: white;
+}
+
+.file-tab .filename {
+    margin-right: 5px;
+    overflow: scroll;
+}
+
+#editor {
+    width: 100%;
+    height: 100%;
 }
