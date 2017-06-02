@@ -24,58 +24,6 @@ body {
     background-size: cover;
 }
 
-#project-list header {
-    margin-bottom: 20px;
-}
-
-#project-view header {
-    margin-bottom: 0;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
-    overflow: scroll;
-}
-
-header .logo {
-    margin-left: 5px;
-    padding: 5px;
-    height: 48px;
-}
-
-header button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin-right: 10px;
-    height: 42px;
-
-    background-color: lightgray;
-    border: none;
-    font-family: inherit;
-    font-size: 12pt;
-    font-weight: bold;
-    outline: none;
-    cursor: pointer;
-}
-
-header button:hover {
-    background-color: #c0c0c0;
-    cursor: pointer;
-}
-
-.button-icon {
-    margin-right: 5px;
-    width: 32px;
-    height: 32px;
-}
-
 .hidden {
     display: none !important;
 }
@@ -257,6 +205,58 @@ header button:hover {
 /* * * * * *
  * Header  *
  * * * * * */
+#project-list header {
+    margin-bottom: 20px;
+}
+
+#project-view header {
+    margin-bottom: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    overflow: scroll;
+}
+
+header .logo {
+    margin-left: 5px;
+    padding: 5px;
+    height: 48px;
+}
+
+header button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 10px;
+    height: 42px;
+
+    background-color: lightgray;
+    border: none;
+    font-family: inherit;
+    font-size: 12pt;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #c0c0c0;
+    cursor: pointer;
+}
+
+.button-icon {
+    margin-right: 5px;
+    width: 32px;
+    height: 32px;
+}
+
 .header-options {
     display: flex;
     margin-right: 5px;

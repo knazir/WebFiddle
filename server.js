@@ -330,6 +330,18 @@ router.post("/users/:username/projects/create", function(req, res) {
 });
 
 /*
+ * Delete a project.
+ */
+router.post("/users/:username/projects/delete", function(req, res) {
+  if (!req.body.projectName) return res.status(400).json({response: "Must specify project name."});
+  const project = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
+  if (!project) return res.status(400).json({response: `Project ${req.body.projectName} does not exist.`});
+
+  PROJECTS.splice(PROJECTS.indexOf(project), 1);
+  res.json({response: "Success"});
+});
+
+/*
  * Update the contents of a file for a project.
  */
 router.post("/users/:username/projects/:projectName/files/:fileId/update", function(req, res) {

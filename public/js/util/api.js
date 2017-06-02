@@ -53,6 +53,10 @@ class Api {
     return Api._post(`/users/${username}/projects/create`, onSuccess, onFailure, { projectName, useStarterCode })
   }
 
+  static deleteProject(username, projectName, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/delete`, onSuccess, onFailure, { projectName });
+  }
+
   static updateFile(username, projectName, fileId, contents, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}/update`,
       onSuccess, onFailure, { contents });

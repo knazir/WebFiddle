@@ -22,6 +22,8 @@
 
     <!-- Modal -->
     <script type="text/javascript" src="js/modal/modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/form-modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/delete-project-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/create-project-modal.js" defer></script>
 
     <!-- Auth -->
@@ -76,6 +78,22 @@
       </div>
     </div>
 
+    <div id="modal-delete-project" class="modal-background hidden">
+      <div class="modal-content">
+        <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+        <h2>Delete Project</h2>
+        <div class="modal-error"></div>
+        <form>
+          <div class="text-input-field">
+            <input type="text" name="name" placeholder="Project Name"/>
+          </div>
+          <div class="submit-button-container">
+            <button class="submit-button">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div id="modal-create-file" class="modal-background hidden">
       <div class="modal-content">
         <div class="modal-title">Create File</div>
@@ -124,7 +142,10 @@
     <div id="project-list" class="hidden">
       <header id="dashboard-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
-        <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
+        <div class="header-options">
+          <button id="delete-project"><img class="button-icon" src="./images/delete_project.png" /> Delete Project</button>
+          <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
+        </div>
       </header>
       <div class="projects"></div>
     </div>

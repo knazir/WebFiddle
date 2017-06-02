@@ -7,7 +7,7 @@ class ProjectList extends Component {
     this._selectProjectCallback = selectProjectCallback;
 
     this._projectListHeader = new ProjectListHeader(containerElement.querySelector("#dashboard-header"),
-      this._createProjectCallback.bind(this));
+      this._deleteProjectCallback.bind(this), this._createProjectCallback.bind(this));
     this._projectsElement = this._containerElement.querySelector(".projects");
   }
 
@@ -29,6 +29,31 @@ class ProjectList extends Component {
       const projectTile = new ProjectTile(tileElement, project, this._selectProjectCallback);
       this._projects.push(projectTile);
       this._projectsElement.appendChild(tileElement);
+    });
+  }
+
+  _deleteProjectCallback(projectName) {
+    Api.deleteProject(this._user.username, projectName, (response) => {
+      let projectIndex = -1;
+      for (let i = 0; i < this._user.projects.length; i++) {
+        const project = this._user.projects[i];
+        if (project.name === projectName) {
+          projectIndex = i;
+          break;
+        }
+      }
+
+      if (projectIndex === -1) {
+        this._projectListHeader.setModalError(`Project ${projectName} does not exist.`);
+        return;
+      }
+
+      this._user.projects.splice(projectIndex, 1);
+      this.reset();
+      this._fillProjectsList();
+      this._projectListHeader.closeModal();
+    }, (error) => {
+      this._projectListHeader.setModalError(error.response);
     });
   }
 
