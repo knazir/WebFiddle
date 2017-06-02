@@ -1,4 +1,12 @@
 class Api {
+  static _checkApiError(response) {
+    return response.status >= 400 && response.status <= 500;
+  }
+
+  static _json(response) {
+    return Api._checkApiError(response) ? Promise.reject(response) : response.json();
+  }
+
   static _makeRequest(method, path, onSuccess, onFailure, body) {
     const opts = {
       method: method,
@@ -7,9 +15,14 @@ class Api {
       body: JSON.stringify(body)
     };
 
+    const handleError = async function(response) {
+      const error = await response.json();
+      onFailure(error);
+    };
+
     return fetch(`${window.location.origin}${path}`, opts)
-      .then(response => response.json())
-      .then(onSuccess, onFailure);
+      .then(Api._json)
+      .then(onSuccess, handleError);
   }
 
   static _get(path, onSuccess, onFailure) {
@@ -34,6 +47,10 @@ class Api {
   static getFile(username, projectName, fileId, onSuccess, onFailure) {
     return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}`,
       onSuccess, onFailure);
+  }
+
+  static createProject(username, projectName, useStarterCode, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/create`, onSuccess, onFailure, { projectName, useStarterCode })
   }
 
   static updateFile(username, projectName, fileId, contents, onSuccess, onFailure) {

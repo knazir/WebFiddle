@@ -6,6 +6,10 @@ class ProjectTile extends Component {
     this._fillTile();
   }
 
+  getProject() {
+    return this._project;
+  }
+
   _fillTile() {
     this._containerElement.querySelector("h3").textContent = this._project.name;
     this._containerElement.addEventListener("click", () => this._selectProjectCallback(this._project));

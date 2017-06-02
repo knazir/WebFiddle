@@ -4,10 +4,10 @@
     <!-- Metadata -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>CS193x Final Project</title>
+    <title>CS193XFiddle</title>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <!-- Libraries -->
@@ -20,12 +20,17 @@
     <script type="text/javascript" src="js/util/api.js" defer></script>
     <script type="text/javascript" src="js/util/component.js" defer></script>
 
+    <!-- Modal -->
+    <script type="text/javascript" src="js/modal/modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/create-project-modal.js" defer></script>
+
     <!-- Auth -->
     <script type="text/javascript" src="js/auth/signup.js" defer></script>
     <script type="text/javascript" src="js/auth/signin.js" defer></script>
     <script type="text/javascript" src="js/auth/auth-box.js" defer></script>
 
     <!-- Dashboard -->
+    <script type="text/javascript" src="js/dashboard/project-list-header.js" defer></script>
     <script type="text/javascript" src="js/dashboard/project-tile.js" defer></script>
     <script type="text/javascript" src="js/dashboard/project-list.js" defer></script>
 
@@ -51,16 +56,42 @@
   <body>
   <div id="app">
 
+    <!-- Modals -->
+    <div id="modal-create-project" class="modal-background hidden">
+      <div class="modal-content">
+        <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+        <h2>Create Project</h2>
+        <div class="modal-error"></div>
+        <form>
+          <div class="text-input-field">
+            <input type="text" name="name" placeholder="Project Name"/>
+          </div>
+          <div class="checkbox-input-field">
+            <input name="starter-code" type="checkbox" /> Create Starter Code
+          </div>
+          <div class="submit-button-container">
+            <button class="submit-button">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-create-file" class="modal-background hidden">
+      <div class="modal-content">
+        <div class="modal-title">Create File</div>
+      </div>
+    </div>
+
     <!-- Authorization -->
     <div id="auth-box">
       <div id="signin" class="credential-box">
         <img class="logo" src="./images/logo.png" />
         <form>
-          <div class="input-field">
+          <div class="text-input-field">
             <img class="form-icon" src="./images/user.png" />
             <input type="text" name="username" placeholder="Username"/>
           </div>
-          <div class="input-field">
+          <div class="text-input-field">
             <img class="form-icon" src="./images/password.png" />
             <input type="password" name="password" placeholder="Password"/>
           </div>
@@ -71,15 +102,15 @@
       <div id="signup" class="credential-box hidden">
         <img class="logo" src="./images/logo.png" />
         <form>
-          <div class="input-field">
+          <div class="text-input-field">
             <img class="form-icon" src="./images/user.png" />
             <input type="text" name="username" placeholder="Username"/>
           </div>
-          <div class="input-field">
+          <div class="text-input-field">
             <img class="form-icon" src="./images/password.png" />
             <input type="password" name="password" placeholder="Password"/>
           </div>
-          <div class="input-field">
+          <div class="text-input-field">
             <img class="form-icon" src="./images/email.png" />
             <input type="email" name="email" placeholder="Email"/>
           </div>
@@ -93,7 +124,7 @@
     <div id="project-list" class="hidden">
       <header id="dashboard-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
-        <button class="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
+        <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
       </header>
       <div class="projects"></div>
     </div>

@@ -136,7 +136,7 @@ header button:hover {
     cursor: pointer;
 }
 
-.input-field {
+.credential-box form .text-input-field {
     display: flex;
     justify-content: flex-start;
     align-items: baseline;
@@ -148,14 +148,14 @@ header button:hover {
     border-bottom: solid 1px lightgray;
 }
 
-.input-field .form-icon {
+.text-input-field .form-icon {
     margin-left: 10px;
     margin-right: 5px;
     width: 16px;
     height: 16px;
 }
 
-.input-field input {
+.credential-box form .text-input-field input {
     width: calc(100% - 35px);
     height: 100%;
     font-size: 14pt;
@@ -163,7 +163,7 @@ header button:hover {
     border: none;
 }
 
-.input-field input:focus {
+.text-input-field input:focus {
     border: none;
     box-shadow: none;
     outline: none;
@@ -205,7 +205,7 @@ header button:hover {
 .projects {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 10px 20px;
     width: 100%;
 }
@@ -340,11 +340,11 @@ header button:hover {
  * TODO: Figure out why this is buggy in Chrome only
  */
 .list-item.selected {
-    background-color: #444444;
+    /*background-color: #444444;*/
 }
 
 .list-item:hover {
-    background-color: #444444;
+    /*background-color: #444444;*/
 }
 
 .list-icon {
@@ -445,4 +445,147 @@ header button:hover {
     height: calc(100% - 50px);
     border: none;
     outline: none;
+}
+
+
+/* * * * *
+ * Modal *
+ * * * * */
+.modal-background {
+    position: absolute;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5) no-repeat center center;
+    background-size: cover;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 400px;
+
+    background-color: #f8f8f8;
+    border-top: rgba(0, 0, 0, 0.05) 1px solid;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+
+    opacity: 0;
+    animation-name: float-up;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.modal-close-button {
+    position: relative;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    margin-right: 15px;
+    width: 100%;
+
+    font-size: 20pt;
+    color: gray;
+    cursor: pointer;
+}
+
+.positioned-close-button {
+    position: absolute;
+    top: 0;
+}
+
+.modal-content h2 {
+    border-bottom: solid 1px lightgray;
+}
+
+.modal-error {
+    font-weight: bold;
+    color: red;
+}
+
+.modal-content form {
+    margin-top: 15px;
+    width: 80%;
+}
+
+.modal-content form .text-input-field {
+    width: 100%;
+    border-bottom: solid 1px lightgray;
+}
+
+.modal-content form .text-input-field input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 14pt;
+    background-color: transparent;
+    border: none;
+}
+
+.modal-content form .checkbox-input-field {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content form .checkbox-input-field input {
+    margin-right: 5px;
+}
+
+.modal-content .submit-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-content form .submit-button {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 5px 0;
+    font-size: 16pt;
+    width: 60%;
+
+    color: white;
+    background-color: #f93975;
+
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .projects {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .project-tile {
+        width: 40%;
+    }
+}
+
+@keyframes float-up {
+    0% {
+        margin-top: 100px;
+        opacity: 0;
+        top: 4rem;
+    }
+
+    100% {
+        margin-top: 0;
+        opacity: 1;
+        top: 0;
+    }
 }

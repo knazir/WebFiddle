@@ -208,6 +208,56 @@ const PROJECTS = [
   }
 ];
 
+/* * * * * * * * * * *
+ * Helper Functions  *
+ * * * * * * * * * * */
+function createIndexFile(id) {
+  return {
+    id: id,
+    type: "html",
+    filename: "index.html",
+    contents: ""
+  };
+}
+
+function createCSSFile(id) {
+  return {
+    id: id,
+    type: "css",
+    filename: "main.css",
+    contents: ""
+  }
+}
+
+function createJSFile(id) {
+  return {
+    id: id,
+    type: "js",
+    filename: "app.js",
+    contents: ""
+  }
+}
+
+
+function getProjectFile(req, res, preview) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+  if (!project.published && !preview) return res.status(400).json({response: `Not found: Project not published.`});
+
+  const filename = req.params.filename || "index.html";
+  const file = project.files.filter((file) => file.filename === filename)[0];
+  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
+
+  const type = mime.lookup(filename);
+  res.setHeader("Content-Type", type);
+  res.send(file.contents);
+}
+
+
+/* * * * * * * *
+ * API Routes  *
+ * * * * * * * */
+
 /*
  * Get a user object. This user has a brief summary of all their projects
  * without the actual file contents.
@@ -251,7 +301,33 @@ router.get("/users/:username/projects/:projectName/files/:fileId", function(req,
   res.json(file);
 });
 
-// TODO: Change POST requests to PATCH where appropriate
+/*
+ * Create a new project.
+ */
+router.post("/users/:username/projects/create", function(req, res) {
+  if (!req.body.projectName) return res.status(400).json({response: "Must specify project name."});
+  const existingProject = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
+  if (existingProject) return res.status(400).json({response: `Project ${req.body.projectName} already exists.`});
+
+  const projectId = (Math.floor(Math.random() * 1000000) + 1).toString();
+
+  let files = [createIndexFile(`${projectId}_1`)];
+  if (req.body.useStarterCode) {
+    files.push(createCSSFile(`${projectId}_2`));
+    files.push(createJSFile(`${projectId}_3`));
+  }
+
+  const newProject = {
+    id: projectId,
+    name: req.body.projectName,
+    createDate: new Date(),
+    lastModified: new Date(),
+    files: files
+  };
+
+  PROJECTS.push(newProject);
+  res.json(newProject);
+});
 
 /*
  * Update the contents of a file for a project.
@@ -281,20 +357,6 @@ router.post("/users/:username/projects/:projectName/publish", function(req, res)
 /* * * * * * * * *
  * Project Views *
  * * * * * * * * */
-function getProjectFile(req, res, preview) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
-  if (!project.published && !preview) return res.status(400).json({response: `Not found: Project not published.`});
-
-  const filename = req.params.filename || "index.html";
-  const file = project.files.filter((file) => file.filename === filename)[0];
-  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
-
-  const type = mime.lookup(filename);
-  res.setHeader("Content-Type", type);
-  res.send(file.contents);
-}
-
 router.get("/view/:username/:projectName/:filename?/", function(req, res) {
   getProjectFile(req, res, false);
 });

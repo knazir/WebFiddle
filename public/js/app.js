@@ -6,7 +6,7 @@ class App extends Component {
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
 
-    //this._getUser("demo");
+    this._getUser("demo");
   }
 
   _signinCallback(event) {
