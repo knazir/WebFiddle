@@ -5,7 +5,11 @@ class FormModal extends Modal {
     this._formSubmitCallback = null;
     this._form = containerElement.querySelector("form");
     this._form.addEventListener("submit", this._submitForm.bind(this));
-    this._form.querySelectorAll("input").forEach(input => input.addEventListener("keyup", () => this.setError("")));
+    this._form.querySelectorAll("input[type=text]").forEach((input) => {
+      input.addEventListener("keyup", (event) => {
+        if (event.key !== "Enter") this.setError("")
+      });
+    });
     this._firstInput = this._form.querySelector("input");
   }
 
@@ -28,6 +32,5 @@ class FormModal extends Modal {
   _submitForm(event) {
     event.preventDefault();
     if (this._formSubmitCallback) this._formSubmitCallback(event);
-    this._form.reset();
   }
 }

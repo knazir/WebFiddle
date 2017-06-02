@@ -30,8 +30,8 @@ class ProjectHeader extends Component {
     this._fullPreviewButton.addEventListener("click", openFullPreviewCallback);
 
     // Publish
-    this._togglePublished = new CheckboxItem(containerElement.querySelector("#published-toggle"),
-      this._togglePublished.bind(this));
+    this._setPublishedStatus = new CheckboxItem(containerElement.querySelector("#published-toggle"),
+      this._setPublishedStatus.bind(this));
 
     // Share
     this._getShareableLinkCallback = getShareableLinkCallback;
@@ -65,7 +65,7 @@ class ProjectHeader extends Component {
   showShareModal() {
     this._activeModal = this._shareModal;
     this._shareModal.setURL(this._getShareableLinkCallback());
-    this._shareModal.show();
+    this._shareModal.show(this._project.published);
   }
 
   setModalError(error) {
@@ -76,7 +76,9 @@ class ProjectHeader extends Component {
     this._activeModal.hide();
   }
 
-  _togglePublished(published) {
-    Api.setProjectPublished(this._user.username, this._project.name, published);
+  _setPublishedStatus(published) {
+    Api.setProjectPublished(this._user.username, this._project.name, published, () => {
+      this._project.published = published;
+    });
   }
 }

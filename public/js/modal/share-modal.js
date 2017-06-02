@@ -10,8 +10,13 @@ class ShareModal extends Modal {
     this._copyLinkButton.addEventListener("click", this._copyLinkToClipboard.bind(this));
   }
 
-  show() {
-    this.setError("");
+  show(published) {
+    if (published) {
+      this.setError("");
+    } else {
+      this.setError("Please publish your project first.");
+      this.setURL("");
+    }
     super.show();
   }
 
