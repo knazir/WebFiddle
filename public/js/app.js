@@ -6,7 +6,7 @@ class App extends Component {
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
 
-    this._getUser("knazir");
+    //this._getUser("demo");
   }
 
   _signinCallback(event) {
@@ -30,7 +30,7 @@ class App extends Component {
 
   _selectProjectCallback(project) {
     this._projectView.reset();
-    Api.getProject(this._user.username, project.id, (project) => {
+    Api.getProject(this._user.username, project.name, (project) => {
       this._project = project;
       this._projectView.setProject(project);
       this._projectList.hide();

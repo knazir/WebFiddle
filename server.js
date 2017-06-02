@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
 const mime = require("mime"); // For determining MIME type of project files
+const cors = require("cors");
 
 const MongoClient = require("mongodb").MongoClient;
 const ObjectID = require("mongodb").ObjectID;
@@ -12,6 +13,7 @@ const jsonParser = bodyParser.json();
 app.enable("strict routing");
 app.use(express.static("public"));
 app.use(jsonParser);
+app.use(cors({ origin: /https?:\/\/(.*\.cs193xfiddle\.herokuapp\.com|localhost)(:[0-9]+)?/i, credentials: true }));
 
 const router = express.Router({
   strict: app.get("strict routing")
@@ -230,18 +232,18 @@ router.get("/users/:username", function(req, res) {
 /*
  * Get project info including file contents.
  */
-router.get("/users/:username/projects/:projectId", function(req, res) {
-  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+router.get("/users/:username/projects/:projectName", function(req, res) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
   res.json(project);
 });
 
 /*
  * Get a single file from a project by its ID.
  */
-router.get("/users/:username/projects/:projectId/files/:fileId", function(req, res) {
-  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+router.get("/users/:username/projects/:projectName/files/:fileId", function(req, res) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
 
   let file = project.files.filter((file) => file.id === req.params.fileId)[0];
   if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
@@ -254,9 +256,9 @@ router.get("/users/:username/projects/:projectId/files/:fileId", function(req, r
 /*
  * Update the contents of a file for a project.
  */
-router.post("/users/:username/projects/:projectId/files/:fileId/update", function(req, res) {
-  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+router.post("/users/:username/projects/:projectName/files/:fileId/update", function(req, res) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
 
   const file = project.files.filter((file) => file.id === req.params.fileId)[0];
   if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
@@ -268,9 +270,9 @@ router.post("/users/:username/projects/:projectId/files/:fileId/update", functio
 /*
  * Set a project's published status.
  */
-router.post("/users/:username/projects/:projectId/publish", function(req, res) {
-  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+router.post("/users/:username/projects/:projectName/publish", function(req, res) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
   project.published = req.body.published;
   res.json({response: "Success"});
 });
@@ -280,8 +282,8 @@ router.post("/users/:username/projects/:projectId/publish", function(req, res) {
  * Project Views *
  * * * * * * * * */
 function getProjectFile(req, res, preview) {
-  const project = PROJECTS.filter((project) => project.id === Number.parseInt(req.params.projectId))[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectId}`});
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
   if (!project.published && !preview) return res.status(400).json({response: `Not found: Project not published.`});
 
   const filename = req.params.filename || "index.html";
@@ -293,11 +295,11 @@ function getProjectFile(req, res, preview) {
   res.send(file.contents);
 }
 
-router.get("/view/:username/:projectId/:filename?/", function(req, res) {
+router.get("/view/:username/:projectName/:filename?/", function(req, res) {
   getProjectFile(req, res, false);
 });
 
-router.get("/preview/:username/:projectId/:filename?/", function(req, res) {
+router.get("/preview/:username/:projectName/:filename?/", function(req, res) {
   getProjectFile(req, res, true);
 });
 

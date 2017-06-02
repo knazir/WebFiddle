@@ -40,7 +40,7 @@ class ProjectHeader extends Component {
   }
 
   _togglePublished(published) {
-    Api.setProjectPublished(this._user.username, this._project.id, published);
+    Api.setProjectPublished(this._user.username, this._project.name, published);
   }
 
 }

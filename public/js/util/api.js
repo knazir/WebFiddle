@@ -7,20 +7,13 @@ class Api {
       body: JSON.stringify(body)
     };
 
-    return fetch(`http://localhost:3000${path}`, opts)
+    return fetch(`https://localhost:3000${path}`, opts)
       .then(response => response.json())
       .then(onSuccess, onFailure);
   }
 
   static _get(path, onSuccess, onFailure) {
     return Api._makeRequest("get", path, onSuccess, onFailure);
-  }
-
-  /*
-   * TODO: Change to "patch" as it makes more sense semantically?
-   */
-  static _patch(path, onSuccess, onFailure, body) {
-    return Api._makeRequest("patch", path, onSuccess, onFailure, body);
   }
 
   static _post(path, onSuccess, onFailure, body) {
@@ -34,20 +27,22 @@ class Api {
     return Api._get(`/users/${username}`, onSuccess, onFailure);
   }
 
-  static getProject(username, projectId, onSuccess, onFailure) {
-    return Api._get(`/users/${username}/projects/${projectId}`, onSuccess, onFailure);
+  static getProject(username, projectName, onSuccess, onFailure) {
+    return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}`, onSuccess, onFailure);
   }
 
-  static getFile(username, projectId, fileId, onSuccess, onFailure) {
-    return Api._get(`/users/${username}/projects/${projectId}/files/${fileId}`, onSuccess, onFailure);
+  static getFile(username, projectName, fileId, onSuccess, onFailure) {
+    return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}`,
+      onSuccess, onFailure);
   }
 
-  static updateFile(username, projectId, fileId, contents, onSuccess, onFailure) {
-    return Api._post(`/users/${username}/projects/${projectId}/files/${fileId}/update`, onSuccess, onFailure,
-      { contents });
+  static updateFile(username, projectName, fileId, contents, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}/update`,
+      onSuccess, onFailure, { contents });
   }
 
-  static setProjectPublished(username, projectId, published, onSuccess, onFailure) {
-    return Api._post(`/users/${username}/projects/${projectId}/publish`, onSuccess, onFailure, { published });
+  static setProjectPublished(username, projectName, published, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/publish`, onSuccess, onFailure,
+      { published });
   }
 }

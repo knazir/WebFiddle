@@ -37,11 +37,11 @@ class Editor extends Component {
   async setFile(file, updateFileBar) {
     // Make sure changes to this file are done
     if (!_.isEmpty(this._file) && !this._fresh && file.id !== this._lastFetchedFile) {
-      await Api.updateFile(this._user.username, this._project.id, this._file.id, this._editor.getValue());
+      await Api.updateFile(this._user.username, this._project.name, this._file.id, this._editor.getValue());
     }
 
     // Ensure we have the latest version
-    Api.getFile(this._user.username, this._project.id, file.id, (latestFile) => {
+    Api.getFile(this._user.username, this._project.name, file.id, (latestFile) => {
       this._fresh = false;
       this._lastFetchedFile = latestFile.id;
       this._file = latestFile;
@@ -84,7 +84,7 @@ class Editor extends Component {
     const newContents = this._editor.getValue();
     this._file.contents = newContents;
     this._updateLivePreviewCallback();
-    Api.updateFile(this._user.username, this._project.id, this._file.id, newContents);
+    Api.updateFile(this._user.username, this._project.name, this._file.id, newContents);
   }
 
   _getEditorMode() {

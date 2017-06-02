@@ -67,9 +67,10 @@ header button {
 
 header button:hover {
     background-color: #c0c0c0;
+    cursor: pointer;
 }
 
-header button img {
+.button-icon {
     margin-right: 5px;
     width: 32px;
     height: 32px;
@@ -259,6 +260,7 @@ header button img {
 .header-options {
     display: flex;
     margin-right: 5px;
+    /* TODO: Figure out why pointer cursor stopped working when you add images */
 }
 
 .checkbox-header-item {
@@ -338,11 +340,11 @@ header button img {
  * TODO: Figure out why this is buggy in Chrome only
  */
 .list-item.selected {
-    /*background-color: #444444;*/
+    background-color: #444444;
 }
 
 .list-item:hover {
-    /*background-color: #444444;*/
+    background-color: #444444;
 }
 
 .list-icon {
@@ -430,7 +432,7 @@ header button img {
     align-items: center;
 
     width: 100%;
-    min-height: 50px;
+    height: 50px;
 
     font-size: 14pt;
     color: white;
@@ -440,6 +442,7 @@ header button img {
 
 #preview-frame {
     width: 100%;
+    height: calc(100% - 50px);
     border: none;
     outline: none;
 }
