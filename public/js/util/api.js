@@ -7,7 +7,7 @@ class Api {
       body: JSON.stringify(body)
     };
 
-    return fetch(`https://localhost:3000${path}`, opts)
+    return fetch(`${window.location.origin}${path}`, opts)
       .then(response => response.json())
       .then(onSuccess, onFailure);
   }
