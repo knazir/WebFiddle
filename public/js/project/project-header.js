@@ -7,14 +7,13 @@ class ProjectHeader extends Component {
     this._project = {};
     this._activeModal = null;
 
-    this._createFileModal = new CreateFileModal(document.querySelector("#modal-create-file"), createFileCallback);
-    this._deleteFileModal = new DeleteFileModal(document.querySelector("#modal-delete-file"), deleteFileCallback);
-
     // Create File
+    this._createFileModal = new CreateFileModal(document.querySelector("#modal-create-file"), createFileCallback);
     this._createFileButton = containerElement.querySelector("#create-file");
     this._createFileButton.addEventListener("click", this.showCreateFileModal.bind(this));
 
     // Delete File
+    this._deleteFileModal = new DeleteFileModal(document.querySelector("#modal-delete-file"), deleteFileCallback);
     this._deleteFileButton = containerElement.querySelector("#delete-file");
     this._deleteFileButton.addEventListener("click", this.showDeleteFileModal.bind(this));
 
@@ -35,8 +34,10 @@ class ProjectHeader extends Component {
       this._togglePublished.bind(this));
 
     // Share
+    this._getShareableLinkCallback = getShareableLinkCallback;
+    this._shareModal = new ShareModal(document.querySelector("#modal-share"));
     this._shareButton = containerElement.querySelector("#share");
-    this._shareButton.addEventListener("click", getShareableLinkCallback);
+    this._shareButton.addEventListener("click", this.showShareModal.bind(this));
   }
 
   reset() {
@@ -59,6 +60,12 @@ class ProjectHeader extends Component {
   showDeleteFileModal() {
     this._activeModal = this._deleteFileModal;
     this._deleteFileModal.show();
+  }
+
+  showShareModal() {
+    this._activeModal = this._shareModal;
+    this._shareModal.setURL(this._getShareableLinkCallback());
+    this._shareModal.show();
   }
 
   setModalError(error) {

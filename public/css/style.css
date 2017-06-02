@@ -627,6 +627,46 @@ header button:hover {
     background-size: 50%;
 }
 
+#modal-share .modal-content form {
+    margin-bottom: 20px;
+}
+
+#modal-share h2 {
+    margin-bottom: 0;
+}
+
+#modal-share .modal-error {
+    margin-top: 5px;
+    color: blue;
+}
+
+#modal-share .modal-content form .text-input-field {
+    border: none;
+    height: 32px;
+}
+
+#modal-share .modal-content form input {
+    box-sizing: border-box;
+    border: solid 1px lightgray;
+    text-align: left;
+}
+
+#copy-share-link {
+    margin-bottom: -1px;
+    min-width: 20%;
+    height: 100%;
+    text-align: center;
+    background-color: lightgray;
+    border: solid 1px lightgray;
+    overflow: scroll;
+    cursor: pointer;
+}
+
+#copy-share-link img {
+    width: inherit;
+    height: inherit;
+}
+
 
 /* * * * * * *
  * Animation *

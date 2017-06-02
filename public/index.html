@@ -13,6 +13,7 @@
     <!-- Libraries -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
 
     <!-- Scripts -->
 
@@ -23,6 +24,7 @@
     <!-- Modal -->
     <script type="text/javascript" src="js/modal/modal.js" defer></script>
     <script type="text/javascript" src="js/modal/form-modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/share-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/delete-file-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/create-file-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/delete-project-modal.js" defer></script>
@@ -134,6 +136,20 @@
           </div>
           <div class="submit-button-container">
             <button class="submit-button">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-share" class="modal-background hidden">
+      <div class="modal-content">
+        <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+        <h2>Share</h2>
+        <div class="modal-error"></div>
+        <form>
+          <div class="text-input-field">
+            <input id="share-link" class="fixed-extension-input read-only-input" type="text" name="share-link" />
+            <div id="copy-share-link" data-clipboard-target="#share-link"><img src="images/link.png" /></div>
           </div>
         </form>
       </div>
