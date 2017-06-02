@@ -11,6 +11,12 @@ class CreateFileModal extends FormModal {
     });
   }
 
+  show() {
+    const type = this._containerElement.querySelector("input[name=\"type\"]:checked").value;
+    this._fixedFileExtensionElement.textContent = `.${type}`;
+    super.show();
+  }
+
   _createFile(event) {
     const filename = event.target[0].value;
     const type = this._containerElement.querySelector("input[name=\"type\"]:checked").value;

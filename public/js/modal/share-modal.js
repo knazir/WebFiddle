@@ -10,8 +10,17 @@ class ShareModal extends Modal {
     this._copyLinkButton.addEventListener("click", this._copyLinkToClipboard.bind(this));
   }
 
+  show() {
+    this.setError("");
+    super.show();
+  }
+
   setURL(url) {
     this._URLField.value = url;
+    setTimeout(() => {
+      this._URLField.focus();
+      this._URLField.setSelectionRange(0, this._URLField.value.length);
+    }, 300);
   }
 
   _copyLinkToClipboard() {
