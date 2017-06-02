@@ -6,15 +6,18 @@ class FormModal extends Modal {
     this._form = containerElement.querySelector("form");
     this._form.addEventListener("submit", this._submitForm.bind(this));
     this._form.querySelectorAll("input").forEach(input => input.addEventListener("keyup", () => this.setError("")));
+    this._firstInput = this._form.querySelector("input");
   }
 
   show() {
-    this._form.focus();
+    setTimeout(() => this._firstInput ? this._firstInput.focus() : this.form.focus(), 300);
     super.show();
   }
 
   hide() {
-    this._form.blur();
+    this.setError("");
+    setTimeout(() => this._firstInput ? this._firstInput.blur() : this._form.blur(), 300);
+    this._form.reset();
     super.hide();
   }
 

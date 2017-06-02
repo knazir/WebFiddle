@@ -34,21 +34,12 @@ class ProjectList extends Component {
 
   _deleteProjectCallback(projectName) {
     Api.deleteProject(this._user.username, projectName, (response) => {
-      let projectIndex = -1;
-      for (let i = 0; i < this._user.projects.length; i++) {
-        const project = this._user.projects[i];
-        if (project.name === projectName) {
-          projectIndex = i;
-          break;
-        }
-      }
-
-      if (projectIndex === -1) {
+      const project = this._user.projects.filter(project => project.name === projectName)[0];
+      if (!project) {
         this._projectListHeader.setModalError(`Project ${projectName} does not exist.`);
         return;
       }
-
-      this._user.projects.splice(projectIndex, 1);
+      this._user.projects.splice(this._user.projects.indexOf(project), 1);
       this.reset();
       this._fillProjectsList();
       this._projectListHeader.closeModal();

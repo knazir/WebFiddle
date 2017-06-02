@@ -55,6 +55,10 @@ class Editor extends Component {
     });
   }
 
+  removeFile(file) {
+    this._fileBar.closeFileTab(file);
+  }
+
   clearEditor() {
     this._editor.setValue("");
     this._editor.setReadOnly(true);

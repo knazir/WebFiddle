@@ -18,7 +18,7 @@ class FileBar extends Component {
 
     if (!fileTab) {
       const fileTabElement = FileTab.createDomNode();
-      fileTab = new FileTab(fileTabElement, file, () => this._selectFileTab(file), () => this._closeFileTab(file));
+      fileTab = new FileTab(fileTabElement, file, () => this._selectFileTab(file), () => this.closeFileTab(file));
       this._fileTabs.push(fileTab);
       this._containerElement.appendChild(fileTab.getContainerElement());
     }
@@ -26,28 +26,15 @@ class FileBar extends Component {
     this._selectFileTab(file);
   }
 
-  _selectFileTab(file) {
-    this._selectFileEditorFileCallback(file, false);
-    this._selectSidebarFileCallback(file);
-    this._fileTabs.forEach(fileTab => fileTab.deselect());
-    this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0].select();
-  }
+  closeFileTab(file) {
+    const fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0];
+    if (!fileTab) return;
 
-  _closeFileTab(file) {
-    let fileTabIndex = -1;
-    for (let i = 0; i < this._fileTabs.length; i++) {
-      const fileTab = this._fileTabs[i];
-      if (fileTab.getFile().id === file.id) {
-        fileTabIndex = i;
-        break;
-      }
-    }
-
-    const fileTab = this._fileTabs[fileTabIndex];
     this._containerElement.removeChild(fileTab.getContainerElement());
+    const fileTabIndex = this._fileTabs.indexOf(fileTab);
     this._fileTabs.splice(fileTabIndex, 1);
 
-    // Deleting tab that's not selected, don't change current selection
+    // If deleting tab that's not selected, don't change current selection
     if (!fileTab.isSelected()) return;
 
     if (this._fileTabs[fileTabIndex]) {
@@ -57,5 +44,12 @@ class FileBar extends Component {
     } else {
       this._deselectSidebarFilesCallback();
     }
+  }
+
+  _selectFileTab(file) {
+    this._selectFileEditorFileCallback(file, false);
+    this._selectSidebarFileCallback(file);
+    this._fileTabs.forEach(fileTab => fileTab.deselect());
+    this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0].select();
   }
 }

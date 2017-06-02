@@ -211,6 +211,18 @@ const PROJECTS = [
 /* * * * * * * * * * *
  * Helper Functions  *
  * * * * * * * * * * */
+function getFilenameWithExtension(filename, type) {
+  if (type === "html" && !filename.endsWith(".html")) {
+    return filename + ".html";
+  } else if (type === "css" && !filename.endsWith(".css")) {
+    return filename + ".css";
+  } else if (type === "js" && !filename.endsWith(".js")) {
+    return filename + ".js";
+  } else {
+    return filename;
+  }
+}
+
 function createIndexFile(id) {
   return {
     id: id,
@@ -305,7 +317,7 @@ router.get("/users/:username/projects/:projectName/files/:fileId", function(req,
  * Create a new project.
  */
 router.post("/users/:username/projects/create", function(req, res) {
-  if (!req.body.projectName) return res.status(400).json({response: "Must specify project name."});
+  if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
   const existingProject = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
   if (existingProject) return res.status(400).json({response: `Project ${req.body.projectName} already exists.`});
 
@@ -362,6 +374,49 @@ router.post("/users/:username/projects/:projectName/publish", function(req, res)
   const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
   if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
   project.published = req.body.published;
+  res.json({response: "Success"});
+});
+
+/*
+ * Create a file in a project.
+ */
+router.post("/users/:username/projects/:projectName/files/create", function(req, res) {
+  const filename = getFilenameWithExtension(req.body.filename, req.body.type);
+
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+
+  if (!req.body.filename) res.status(400).json({response: "Please specify a filename."});
+
+  const existingFile = project.files.filter((file) => file.filename === filename)[0];
+  if (existingFile) return res.status(400).json({response: `File ${filename} already exists.`});
+
+  if (!req.body.type) return res.status(400).json({response: "Please specify a file type."});
+
+  const newFile = {
+    id: `${project.id}_${project.files.length + 1}`,
+    type: req.body.type,
+    filename: filename,
+    contents: ""
+  };
+
+  project.files.push(newFile);
+  res.json(newFile);
+});
+
+/*
+ * Delete a file from a project.
+ */
+router.post("/users/:username/projects/:projectName/files/delete", function(req, res) {
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+
+  if (!req.body.filename) res.status(400).json({response: "Please specify a filename."});
+
+  const existingFile = project.files.filter((file) => file.filename === req.body.filename)[0];
+  if (!existingFile) return res.status(400).json({response: `File ${req.body.filename} does not exist.`});
+
+  project.files.splice(project.files.indexOf(existingFile), 1);
   res.json({response: "Success"});
 });
 

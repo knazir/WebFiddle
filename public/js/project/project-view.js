@@ -7,7 +7,8 @@ class ProjectView extends Component {
 
     this._projectHeader = new ProjectHeader(containerElement.querySelector("#project-header"),
       this._toggleLineWrapCallback.bind(this), this._toggleLivePreviewCallback.bind(this),
-      this._openFullPreviewCallback.bind(this), this._getShareableLinkCallback.bind(this));
+      this._openFullPreviewCallback.bind(this), this._getShareableLinkCallback.bind(this),
+      this._createFileCallback.bind(this), this._deleteFileCallback.bind(this));
     this._sidebar = new Sidebar(containerElement.querySelector("#sidebar"), this._selectEditorFileCallback.bind(this));
     this._editor = new Editor(containerElement.querySelector("#editor-area"), this._selectSidebarFileCallback.bind(this),
       this._deselectSidebarFileCallback.bind(this), this._updateLivePreviewCallback.bind(this));
@@ -30,11 +31,16 @@ class ProjectView extends Component {
   }
 
   setProject(project) {
-    this._project = project;
-    this._projectHeader.setProject(project);
-    this._sidebar.setProject(project);
-    this._editor.setProject(project);
-    this._livePreview.setProject(project);
+    // Make sure we have the latest version of the project
+    Api.getProject(this._user.username, project.name, (newProject) => {
+      this._project = newProject;
+      this._projectHeader.setProject(newProject);
+      this._sidebar.setProject(newProject);
+      this._editor.setProject(newProject);
+      this._livePreview.setProject(newProject);
+
+      if (this._project.files.length === 0) this._projectHeader.showCreateFileModal();
+    });
   }
 
   _toggleLineWrapCallback(wrap) {
@@ -74,5 +80,35 @@ class ProjectView extends Component {
   _deselectSidebarFileCallback() {
     this._editor.clearEditor();
     this._sidebar.deselectAll();
+  }
+
+  _createFileCallback(filename, type) {
+    Api.createFile(this._user.username, this._project.name, filename, type, (file) => {
+      this._project.files.push(file);
+      this._sidebar.fillFileTree();
+      this._selectSidebarFileCallback(file);
+      this._selectEditorFileCallback(file);
+      this._projectHeader.closeModal();
+    }, (error) => {
+      this._projectHeader.setModalError(error.response);
+    })
+  }
+
+  _deleteFileCallback(filename) {
+    Api.deleteFile(this._user.username, this._project.name, filename, (reponse) => {
+      const file = this._project.files.filter(file => file.filename === filename)[0];
+
+      if (!file) {
+        this._projectHeader.setModalError(`File ${filename} does not exist.`);
+        return;
+      }
+
+      this._project.files.splice(this._project.files.indexOf(file), 1);
+      this._sidebar.fillFileTree();
+      this._editor.removeFile(file);
+      this._projectHeader.closeModal();
+    }, (error) => {
+      this._projectHeader.setModalError(error.response);
+    })
   }
 }

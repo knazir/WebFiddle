@@ -225,6 +225,7 @@ header {
 
 header .logo {
     margin-left: 5px;
+    margin-right: 10px;
     padding: 5px;
     height: 48px;
 }
@@ -234,7 +235,7 @@ header button {
     justify-content: center;
     align-items: center;
 
-    margin-right: 10px;
+    margin: 5px 10px 5px 0;
     height: 42px;
 
     background-color: lightgray;
@@ -259,6 +260,7 @@ header button:hover {
 
 .header-options {
     display: flex;
+    flex-wrap: wrap;
     margin-right: 5px;
     /* TODO: Figure out why pointer cursor stopped working when you add images */
 }
@@ -268,7 +270,7 @@ header button:hover {
     justify-content: center;
     align-items: center;
 
-    margin-right: 10px;
+    margin: 5px 10px 5px 0;
     padding: 8px;
     height: 42px;
 
@@ -517,6 +519,7 @@ header button:hover {
 }
 
 .modal-content form .text-input-field {
+    display: flex;
     width: 100%;
     border-bottom: solid 1px lightgray;
 }
@@ -563,19 +566,71 @@ header button:hover {
     cursor: pointer;
 }
 
-@media (max-width: 700px) {
-    .projects {
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .project-tile {
-        width: 40%;
-    }
+.fixed-extension-input {
+    width: 80% !important;
 }
 
+#fixed-file-extension {
+    margin-bottom: -1px;
+    min-width: 20%;
+    height: 25px;
+    text-align: center;
+    border: solid 1px lightgray;
+    overflow: scroll;
+}
+
+.file-type-picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.file-type-picker input[type=radio] {
+    display: none;
+}
+
+.file-type-picker input[type=radio] + label {
+    border: solid 1px transparent;
+    cursor: pointer;
+}
+
+.file-type-picker input[type=radio]:checked + label {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: solid 1px rgba(81, 203, 238, 1);
+    cursor: pointer;
+}
+
+.image-checkbox + label {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 33%;
+    height: 100px;
+    cursor: pointer;
+}
+
+#pick-html + label {
+    background: url("../images/html.png") no-repeat center center;
+    background-size: 50%;
+}
+
+#pick-css + label {
+    background: url("../images/css.png") no-repeat center center;
+    background-size: 50%;
+}
+
+#pick-js + label {
+    background: url("../images/js.png") no-repeat center center;
+    background-size: 50%;
+}
+
+
+/* * * * * * *
+ * Animation *
+ * * * * * * */
 @keyframes float-up {
     0% {
         margin-top: 100px;
@@ -587,5 +642,22 @@ header button:hover {
         margin-top: 0;
         opacity: 1;
         top: 0;
+    }
+}
+
+
+/* * * * * * * * *
+ * Mobile Layout *
+ * * * * * * * * */
+@media (max-width: 700px) {
+    .projects {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .project-tile {
+        width: 40%;
     }
 }

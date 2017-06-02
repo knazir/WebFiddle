@@ -23,6 +23,8 @@
     <!-- Modal -->
     <script type="text/javascript" src="js/modal/modal.js" defer></script>
     <script type="text/javascript" src="js/modal/form-modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/delete-file-modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/create-file-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/delete-project-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/create-project-modal.js" defer></script>
 
@@ -96,7 +98,44 @@
 
     <div id="modal-create-file" class="modal-background hidden">
       <div class="modal-content">
-        <div class="modal-title">Create File</div>
+        <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+        <h2>Create File</h2>
+        <div class="modal-error"></div>
+        <form>
+          <div class="text-input-field">
+            <input class="fixed-extension-input" type="text" name="name" placeholder="Filename"/>
+            <div id="fixed-file-extension">.html</div>
+          </div>
+          <div class="file-type-picker">
+            <input id="pick-html" class="image-checkbox" type="radio" name="type" value="html" checked />
+            <label for="pick-html"></label>
+
+            <input id="pick-css" class="image-checkbox" type="radio" name="type" value="css" />
+            <label for="pick-css"></label>
+
+            <input id="pick-js" class="image-checkbox" type="radio" name="type" value="js" />
+            <label for="pick-js"></label>
+          </div>
+          <div class="submit-button-container">
+            <button class="submit-button">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-delete-file" class="modal-background hidden">
+      <div class="modal-content">
+        <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+        <h2>Delete File</h2>
+        <div class="modal-error"></div>
+        <form>
+          <div class="text-input-field">
+            <input type="text" name="name" placeholder="Filename"/>
+          </div>
+          <div class="submit-button-container">
+            <button class="submit-button">Delete</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -143,8 +182,8 @@
       <header id="dashboard-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
-          <button id="delete-project"><img class="button-icon" src="./images/delete_project.png" /> Delete Project</button>
           <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
+          <button id="delete-project"><img class="button-icon" src="./images/delete_project.png" /> Delete Project</button>
         </div>
       </header>
       <div class="projects"></div>
@@ -155,6 +194,8 @@
       <header id="project-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
+          <button id="create-file">Create File</button>
+          <button id="delete-file">Delete File</button>
           <span id="line-wrap-toggle" class="checkbox-header-item">
             <input type="checkbox" checked />Wrap Lines
           </span>

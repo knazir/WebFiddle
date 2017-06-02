@@ -1,10 +1,22 @@
 class ProjectHeader extends Component {
   constructor(containerElement, toggleLineWrapCallback, toggleLivePreviewCallback, openFullPreviewCallback,
-              getShareableLinkCallback) {
+              getShareableLinkCallback, createFileCallback, deleteFileCallback) {
     super(containerElement);
 
     this._user = {};
     this._project = {};
+    this._activeModal = null;
+
+    this._createFileModal = new CreateFileModal(document.querySelector("#modal-create-file"), createFileCallback);
+    this._deleteFileModal = new DeleteFileModal(document.querySelector("#modal-delete-file"), deleteFileCallback);
+
+    // Create File
+    this._createFileButton = containerElement.querySelector("#create-file");
+    this._createFileButton.addEventListener("click", this.showCreateFileModal.bind(this));
+
+    // Delete File
+    this._deleteFileButton = containerElement.querySelector("#delete-file");
+    this._deleteFileButton.addEventListener("click", this.showDeleteFileModal.bind(this));
 
     // Line Wrap
     this._toggleLineWrap = new CheckboxItem(containerElement.querySelector("#line-wrap-toggle"),
@@ -39,8 +51,25 @@ class ProjectHeader extends Component {
     this._project = project;
   }
 
+  showCreateFileModal() {
+    this._activeModal = this._createFileModal;
+    this._createFileModal.show();
+  }
+
+  showDeleteFileModal() {
+    this._activeModal = this._deleteFileModal;
+    this._deleteFileModal.show();
+  }
+
+  setModalError(error) {
+    this._activeModal.setError(error);
+  }
+
+  closeModal() {
+    this._activeModal.hide();
+  }
+
   _togglePublished(published) {
     Api.setProjectPublished(this._user.username, this._project.name, published);
   }
-
 }

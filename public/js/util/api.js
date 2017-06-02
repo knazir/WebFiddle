@@ -57,8 +57,17 @@ class Api {
     return Api._post(`/users/${username}/projects/delete`, onSuccess, onFailure, { projectName });
   }
 
-  static updateFile(username, projectName, fileId, contents, onSuccess, onFailure) {
-    return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}/update`,
+  static createFile(username, projectName, filename, type, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${projectName}/files/create`, onSuccess, onFailure,
+      { filename, type })
+  }
+
+  static deleteFile(username, projectName, filename, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${projectName}/files/delete`, onSuccess, onFailure, { filename });
+  }
+
+  static updateFile(username, projectName, filename, contents, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${filename}/update`,
       onSuccess, onFailure, { contents });
   }
 

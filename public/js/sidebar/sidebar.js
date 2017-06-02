@@ -33,19 +33,22 @@ class Sidebar extends Component {
   setProject(project) {
     this._project = project;
     this._setTitle();
-    this._fillFileTree();
+    this.fillFileTree();
   }
 
-  _setTitle() {
-    this._titleElement.textContent = this._project.name;
-  }
+  fillFileTree() {
+    this._fileTreeElement.innerHTML = "";
+    this._listItems = [];
 
-  _fillFileTree() {
     this._project.files.forEach((file) => {
       const itemElement = ListItem.createDomNode();
       const item = new ListItem(itemElement, file, this._selectEditorFileCallback);
       this._listItems.push(item);
       this._fileTreeElement.appendChild(itemElement);
     })
+  }
+
+  _setTitle() {
+    this._titleElement.textContent = this._project.name;
   }
 }
