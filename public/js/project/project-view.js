@@ -106,7 +106,9 @@ class ProjectView extends Component {
       this._project.files.splice(this._project.files.indexOf(file), 1);
       this._sidebar.fillFileTree();
       this._editor.removeFile(file);
+
       this._projectHeader.closeModal();
+      if (this._project.files.length === 0) this._projectHeader.showCreateFileModal();
     }, (error) => {
       this._projectHeader.setModalError(error.response);
     })
