@@ -1,11 +1,12 @@
 class Sidebar extends Component {
-  constructor(containerElement, selectEditorFileCallback, deleteFileCallback) {
+  constructor(containerElement, selectEditorFileCallback, deleteFileCallback, createFileCallback) {
     super(containerElement);
 
     this._project = {};
     this._listItems = [];
 
     this._titleElement = containerElement.querySelector(".project-title");
+    containerElement.querySelector("#add-file").addEventListener("click", createFileCallback);
     this._fileTreeElement = this._containerElement.querySelector(".file-tree");
 
     this._selectEditorFileCallback = (file) => {

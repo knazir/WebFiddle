@@ -154,11 +154,14 @@ body {
 .project-tile {
     margin: 20px 10px;
     width: 18%;
-    height: 100%;
+    height: 160px;
 
     background: lightgray;
     border-top: rgba(0, 0, 0, 0.05) 1px solid;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+
+    animation-name: slightly-shrink;
+    animation-duration: 0.5s;
 
     cursor: pointer;
 }
@@ -171,11 +174,14 @@ body {
 
     padding: 15px;
     width: 100%;
-    height: 100%;
 }
 
 .project-tile:hover {
+    width: 19%;
+    height: 170px;
     background-color: #c0c0c0;
+    animation-name: slightly-grow;
+    animation-duration: 0.5s;
 }
 
 .project-delete-button {
@@ -260,6 +266,7 @@ header button {
 
     background-color: lightgray;
     border: none;
+    border-radius: 5px;
     font-family: inherit;
     font-size: 12pt;
     font-weight: bold;
@@ -291,14 +298,28 @@ header button:hover {
     align-items: center;
 
     margin: 5px 10px 5px 0;
-    padding: 8px;
+    padding: 8px 10px;
     height: 42px;
 
     font-size: 12pt;
     font-weight: bold;
     background-color: lightgray;
+    border-radius: 5px;
     user-select: none;
     cursor: pointer;
+}
+
+.checkbox-header-item.selected {
+    background-color: #616161;
+    color :white;
+}
+
+.checkbox-header-item.selected:hover {
+    background-color: #4f4f4f;
+}
+
+.checkbox-header-item input[type=checkbox] {
+    display: none;
 }
 
 .checkbox-header-item:hover {
@@ -326,16 +347,40 @@ header button:hover {
     border-right: solid 2px #313131;
 }
 
-.project-title {
-    padding: 10px;
+.project-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     width: 100%;
 
     font-size: 18pt;
     font-weight: bold;
     color: white;
 
-    text-align: center;
     border-bottom: solid 3px #e54d42;
+}
+
+.project-title {
+    padding: 10px;
+    width: 95%;
+}
+
+#add-file {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 5px 10px;
+    width: 5%;
+    font-size: 20pt;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#add-file:hover {
+    color: black;
+    background: white;
 }
 
 .file-tree {
@@ -745,6 +790,30 @@ header button:hover {
     100% {
         box-shadow: 0 0 5px rgba(81, 203, 238, 1);
         border: solid 1px rgba(81, 203, 238, 1);
+    }
+}
+
+@keyframes slightly-grow {
+    0% {
+        width: 18%;
+        height: 160px;
+    }
+
+    100% {
+        width: 19%;
+        height: 170px;
+    }
+}
+
+@keyframes slightly-shrink {
+    0% {
+        width: 19%;
+        height: 170px;
+    }
+
+    100% {
+        width: 18%;
+        height: 160px;
     }
 }
 

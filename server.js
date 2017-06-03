@@ -44,7 +44,6 @@ const PROJECTS = [
   {
     id: 1,
     name: "Simple Project",
-    published: false,
     createDate: new Date(),
     lastModified: new Date(),
     files: [
@@ -59,7 +58,6 @@ const PROJECTS = [
   {
     id: 2,
     name: "Hello World",
-    published: false,
     createDate: new Date(),
     lastModified: new Date(),
     files: [
@@ -80,7 +78,6 @@ const PROJECTS = [
   {
     id: 3,
     name: "HW1",
-    published: false,
     createDate: new Date(),
     lastModified: new Date(),
     files: [
@@ -101,7 +98,6 @@ const PROJECTS = [
   {
     id: 4,
     name: "HW2",
-    published: false,
     createDate: new Date(),
     lastModified: new Date(),
     files: [
@@ -128,7 +124,6 @@ const PROJECTS = [
   {
     id: 5,
     name: "HW3",
-    published: false,
     createDate: new Date(),
     lastModified: new Date(),
     files: [
@@ -251,21 +246,6 @@ function createJSFile(id) {
 }
 
 
-function getProjectFile(req, res, preview) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
-  if (!project.published && !preview) return res.status(400).json({response: `Not found: Project not published.`});
-
-  const filename = req.params.filename || "index.html";
-  const file = project.files.filter((file) => file.filename === filename)[0];
-  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
-
-  const type = mime.lookup(filename);
-  res.setHeader("Content-Type", type);
-  res.send(file.contents);
-}
-
-
 /* * * * * * * *
  * API Routes  *
  * * * * * * * */
@@ -321,6 +301,10 @@ router.post("/users/:username/projects/create", function(req, res) {
   const existingProject = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
   if (existingProject) return res.status(400).json({response: `Project ${req.body.projectName} already exists.`});
 
+  if (req.body.projectName.length > 26) {
+    return res.status(400).json({response: `Project name must be 26 characters or less.`});
+  }
+
   const projectId = (Math.floor(Math.random() * 1000000) + 1).toString();
 
   let files = [createIndexFile(`${projectId}_1`)];
@@ -364,16 +348,6 @@ router.post("/users/:username/projects/:projectName/files/:fileId/update", funct
   if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
 
   file.contents = req.body.contents;
-  res.json({response: "Success"});
-});
-
-/*
- * Set a project's published status.
- */
-router.post("/users/:username/projects/:projectName/publish", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
-  project.published = req.body.published;
   res.json({response: "Success"});
 });
 
@@ -425,10 +399,15 @@ router.post("/users/:username/projects/:projectName/files/delete", function(req,
  * Project Views *
  * * * * * * * * */
 router.get("/view/:username/:projectName/:filename?/", function(req, res) {
-  getProjectFile(req, res, false);
-});
+  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
+  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
 
-router.get("/preview/:username/:projectName/:filename?/", function(req, res) {
-  getProjectFile(req, res, true);
+  const filename = req.params.filename || "index.html";
+  const file = project.files.filter((file) => file.filename === filename)[0];
+  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
+
+  const type = mime.lookup(filename);
+  res.setHeader("Content-Type", type);
+  res.send(file.contents);
 });
 

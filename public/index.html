@@ -217,24 +217,20 @@
       <header id="project-header">
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
-          <button id="create-file">Create File</button>
-          <span id="line-wrap-toggle" class="checkbox-header-item">
-            <input type="checkbox" checked />Wrap Lines
-          </span>
           <span id="live-preview-toggle" class="checkbox-header-item">
-            <input type="checkbox" />Split View
+            <input type="checkbox" />Split
           </span>
           <button id="full-preview-button">Preview</button>
-          <span id="published-toggle" class="checkbox-header-item">
-            <input type="checkbox" />Publish
-          </span>
           <button id="share">Share</button>
         </div>
       </header>
 
       <div class="project">
         <div id="sidebar">
-          <div class="project-title"></div>
+          <div class="project-title-container">
+            <div class="project-title"></div>
+            <div id="add-file">+</div>
+          </div>
           <div class="file-tree"></div>
         </div>
         <div id="editor-area">

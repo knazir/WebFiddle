@@ -11,6 +11,10 @@ class CheckboxItem extends Component {
   _outerToggle(event) {
     event.stopPropagation();
     this._checkbox.checked = !this._checkbox.checked;
+
+    if (this._checkbox.checked) this._containerElement.classList.add("selected");
+    else this._containerElement.classList.remove("selected");
+
     this._toggleCheckbox(event);
   }
 

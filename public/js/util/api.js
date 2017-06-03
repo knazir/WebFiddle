@@ -20,7 +20,7 @@ class Api {
       onFailure(error);
     };
 
-    return fetch(`${window.location.origin}${path}`, opts)
+    return fetch(path, opts)
       .then(Api._json)
       .then(onSuccess, handleError);
   }
@@ -69,10 +69,5 @@ class Api {
   static updateFile(username, projectName, filename, contents, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${filename}/update`,
       onSuccess, onFailure, { contents });
-  }
-
-  static setProjectPublished(username, projectName, published, onSuccess, onFailure) {
-    return Api._post(`/users/${username}/projects/${encodeURIComponent(projectName)}/publish`, onSuccess, onFailure,
-      { published });
   }
 }

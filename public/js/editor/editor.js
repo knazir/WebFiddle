@@ -61,7 +61,7 @@ class Editor extends Component {
   }
 
   clearEditor() {
-    this._editor.setValue("Select or create a new file!", -1);
+    this._editor.setValue("", -1);
     this._editor.setReadOnly(true);
   }
 
