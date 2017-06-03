@@ -3,6 +3,7 @@ const express = require("express");
 const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
 const mime = require("mime"); // For determining MIME type of project files
 const cors = require("cors");
+const fs = require("fs");
 
 const MongoClient = require("mongodb").MongoClient;
 const ObjectID = require("mongodb").ObjectID;
@@ -218,13 +219,19 @@ function getFilenameWithExtension(filename, type) {
   }
 }
 
-function createIndexFile(id) {
-  return {
+ function createIndexFile(id, useStarterCode) {
+  const index = {
     id: id,
     type: "html",
     filename: "index.html",
     contents: ""
   };
+
+  if (useStarterCode) {
+    index.contents = fs.readFileSync("res/boilerplate.html").toString("utf-8");
+  }
+
+  return index;
 }
 
 function createCSSFile(id) {
@@ -303,7 +310,7 @@ router.post("/users/:username/projects/create", function(req, res) {
 
   const projectId = (Math.floor(Math.random() * 1000000) + 1).toString();
 
-  let files = [createIndexFile(`${projectId}_1`)];
+  let files = [createIndexFile(`${projectId}_1`, req.body.useStarterCode)];
   if (req.body.useStarterCode) {
     files.push(createCSSFile(`${projectId}_2`));
     files.push(createJSFile(`${projectId}_3`));

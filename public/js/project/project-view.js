@@ -6,7 +6,7 @@ class ProjectView extends Component {
     this._project = {};
 
     this._projectHeader = new ProjectHeader(containerElement.querySelector("#project-header"),
-      this._toggleLivePreviewCallback.bind(this),
+      this._toggleLineWrapCallback.bind(this), this._toggleLivePreviewCallback.bind(this),
       this._openFullPreviewCallback.bind(this), this._getShareableLinkCallback.bind(this),
       this._createFileCallback.bind(this), this._deleteFileCallback.bind(this));
     this._sidebar = new Sidebar(containerElement.querySelector("#sidebar"), this._selectEditorFileCallback.bind(this),

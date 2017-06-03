@@ -1,6 +1,6 @@
 class ProjectHeader extends Component {
-  constructor(containerElement, toggleLivePreviewCallback, openFullPreviewCallback, getShareableLinkCallback,
-              createFileCallback, deleteFileCallback) {
+  constructor(containerElement, toggleLineWrapCallback, toggleLivePreviewCallback, openFullPreviewCallback,
+              getShareableLinkCallback, createFileCallback, deleteFileCallback) {
     super(containerElement);
 
     this._user = {};
@@ -10,8 +10,13 @@ class ProjectHeader extends Component {
     // Create File
     this._createFileModal = new CreateFileModal(document.querySelector("#modal-create-file"), createFileCallback);
 
+
     // Delete File
     this._deleteFileModal = new DeleteFileModal(document.querySelector("#modal-delete-file"), deleteFileCallback);
+
+    // Line Wrap
+    this._toggleLineWrap = new CheckboxItem(containerElement.querySelector("#line-wrap-toggle"),
+      toggleLineWrapCallback);
 
     // Split View
     this._toggleLivePreview = new CheckboxItem(containerElement.querySelector("#live-preview-toggle"),
@@ -53,7 +58,7 @@ class ProjectHeader extends Component {
   showShareModal() {
     this._activeModal = this._shareModal;
     this._shareModal.setURL(this._getShareableLinkCallback());
-    this._shareModal.show();
+    this._shareModal.show(this._project.published);
   }
 
   setModalError(error) {
@@ -62,5 +67,11 @@ class ProjectHeader extends Component {
 
   closeModal() {
     this._activeModal.hide();
+  }
+
+  _setPublishedStatus(published) {
+    Api.setProjectPublished(this._user.username, this._project.name, published, () => {
+      this._project.published = published;
+    });
   }
 }
