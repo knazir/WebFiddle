@@ -108,9 +108,8 @@ function getFilenameWithExtension(filename, type) {
   }
 }
 
-function createIndexFile(id, useStarterCode) {
+function createIndexFile(useStarterCode) {
   const index = {
-    id: id,
     type: "html",
     filename: "index.html",
     contents: ""
@@ -123,9 +122,8 @@ function createIndexFile(id, useStarterCode) {
   return index;
 }
 
-function createCSSFile(id) {
+function createCSSFile() {
   return {
-    id: id,
     type: "css",
     filename: "main.css",
     contents: ""
@@ -134,7 +132,6 @@ function createCSSFile(id) {
 
 function createJSFile(id) {
   return {
-    id: id,
     type: "js",
     filename: "app.js",
     contents: ""
@@ -214,14 +211,14 @@ router.post("/users/:username/projects/create", async function(req, res) {
   const existingProject = await projects.findOne({username: username, name: caseInsensitive(req.body.projectName)});
   if (existingProject) return res.status(400).json({response: `Project "${req.body.projectName}" already exists.`});
 
-  let files = [createIndexFile(`${existingProject._id}_1`, req.body.useStarterCode)];
+  let files = [createIndexFile(req.body.useStarterCode)];
   if (req.body.useStarterCode) {
-    files.push(createCSSFile(`${existingProject._id}_2`));
-    files.push(createJSFile(`${existingProject._id}_3`));
+    files.push(createCSSFile());
+    files.push(createJSFile());
   }
 
-  const newProjectId = projects.insertOne(createProject(username, req.body.projectName, files));
-  const newProject = await projects.findOne({_id: newProjectId});
+  const newProjectInsert = await projects.insertOne(createProject(username, req.body.projectName, files));
+  const newProject = await projects.findOne({_id: newProjectInsert.insertedId});
 
   res.json(newProject);
 });
@@ -351,7 +348,7 @@ router.get("/view/:username/:projectName/:filename?/", async function(req, res) 
   const filename = req.params.filename || "index.html";
   const file = project.files.filter((file) => file.filename === filename)[0];
   if (!file) {
-    let response = `<h4 style="text-align: center">File "${filename}" does not exist.</h4>`;
+    let response = `<h4 style="text-align: center">404 "${filename}" Not Found</h4>`;
     if (filename === "index.html") {
       response = "<h4 style='text-align: center'>Project does not contain an index.html file.</h4>";
     }

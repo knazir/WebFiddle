@@ -586,6 +586,7 @@ header button:hover {
 }
 
 .modal-error {
+    padding: 0 10px;
     text-align: center;
     font-size: 14pt;
     font-weight: bold;

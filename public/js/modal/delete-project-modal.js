@@ -20,7 +20,7 @@ class DeleteProjectModal extends Modal {
 
   show(projectName) {
     this._hiddenProjectNameInput.value = projectName;
-    this.setError(`Are you sure you want to delete ${projectName}`);
+    this.setError(`Are you sure you want to delete ${projectName}?`);
     super.show();
   }
 }

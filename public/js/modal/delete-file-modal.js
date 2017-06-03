@@ -21,7 +21,7 @@ class DeleteFileModal extends Modal {
 
   show(filename) {
     this._hiddenFilenameInput.value = filename;
-    this.setError(`Are you sure you want to delete ${filename}`);
+    this.setError(`Are you sure you want to delete ${filename}?`);
     super.show();
   }
 }
