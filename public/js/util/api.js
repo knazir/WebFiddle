@@ -17,7 +17,7 @@ class Api {
 
     const handleError = async function(response) {
       const error = await response.json();
-      onFailure(error);
+      onFailure ? onFailure(error) : errorModal.setError(error);
     };
 
     return fetch(path, opts)
@@ -36,16 +36,20 @@ class Api {
   /*
    * TODO: Be more secure about passwords...
    */
-  static getUser(username, password, onSuccess, onFailure) {
-    return Api._get(`/users/${username}`, onSuccess, onFailure);
+  static signin(username, password, onSuccess, onFailure) {
+    return Api._post(`/users/signin`, onSuccess, onFailure, { username });
+  }
+
+  static signup(username, password, confirmPassword, email, onSuccess, onFailure) {
+    return Api._post(`/users/signup`, onSuccess, onFailure, { username, password, confirmPassword, email });
   }
 
   static getProject(username, projectName, onSuccess, onFailure) {
     return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}`, onSuccess, onFailure);
   }
 
-  static getFile(username, projectName, fileId, onSuccess, onFailure) {
-    return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${fileId}`,
+  static getFile(username, projectName, filename, onSuccess, onFailure) {
+    return Api._get(`/users/${username}/projects/${encodeURIComponent(projectName)}/files/${filename}`,
       onSuccess, onFailure);
   }
 

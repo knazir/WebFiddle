@@ -14,7 +14,7 @@ class FileBar extends Component {
   }
 
   setFile(file) {
-    let fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0];
+    let fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().filename === file.filename)[0];
 
     if (!fileTab) {
       const fileTabElement = FileTab.createDomNode();
@@ -27,7 +27,7 @@ class FileBar extends Component {
   }
 
   closeFileTab(file) {
-    const fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0];
+    const fileTab = this._fileTabs.filter(fileTab => fileTab.getFile().filename === file.filename)[0];
     if (!fileTab) return;
 
     this._containerElement.removeChild(fileTab.getContainerElement());
@@ -50,6 +50,6 @@ class FileBar extends Component {
     this._selectFileEditorFileCallback(file, false);
     this._selectSidebarFileCallback(file);
     this._fileTabs.forEach(fileTab => fileTab.deselect());
-    this._fileTabs.filter(fileTab => fileTab.getFile().id === file.id)[0].select();
+    this._fileTabs.filter(fileTab => fileTab.getFile().filename === file.filename)[0].select();
   }
 }

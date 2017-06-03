@@ -5,21 +5,16 @@ class App extends Component {
     this._authBox = new AuthBox(document.querySelector("#auth-box"), this._signinCallback.bind(this));
     this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
     this._projectView = new ProjectView(document.querySelector("#project-view"));
-
-    this._getUser("demo");
   }
 
-  _signinCallback(event) {
+  _signinCallback(username, password) {
     this._projectList.reset();
     this._projectView.reset();
-
-    const username = event.target[0].value;
-    const password = event.target[1].value;
     this._getUser(username, password);
   }
 
   _getUser(username, password) {
-    Api.getUser(username, password, (user) => {
+    Api.signin(username, password, (user) => {
       this._user = user;
       this._projectList.setUser(user);
       this._projectView.setUser(user);

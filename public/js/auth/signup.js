@@ -8,6 +8,12 @@ class SignUp extends Component {
 
   _signup(event) {
     event.preventDefault();
-    this._signinCallback(event);
+    const username = event.target[0].value;
+    const password = event.target[1].value;
+    const confirmPassword = event.target[2].value;
+    const email = event.target[3].value;
+    Api.signup(username, password, confirmPassword, email, (response) => {
+      this._signinCallback(username, password);
+    });
   }
 }

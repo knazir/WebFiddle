@@ -587,6 +587,7 @@ header button:hover {
 
 .modal-error {
     text-align: center;
+    font-size: 14pt;
     font-weight: bold;
     color: red;
 }
@@ -710,7 +711,7 @@ header button:hover {
     margin: 0;
 }
 
-#modal-delete-file .submit-button, #modal-delete-project .submit-button {
+#modal-error .submit-button, #modal-delete-file .submit-button, #modal-delete-project .submit-button {
     margin-top: 20px;
 }
 

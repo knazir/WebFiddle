@@ -8,6 +8,8 @@ class SignIn extends Component {
 
   _signin(event) {
     event.preventDefault();
-    this._signinCallback(event);
+    const username = event.target[0].value;
+    const password = event.target[1].value;
+    this._signinCallback(username, password);
   }
 }

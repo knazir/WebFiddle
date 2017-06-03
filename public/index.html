@@ -31,6 +31,7 @@
     <script type="text/javascript" src="js/modal/create-file-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/delete-project-modal.js" defer></script>
     <script type="text/javascript" src="js/modal/create-project-modal.js" defer></script>
+    <script type="text/javascript" src="js/modal/error-modal.js" defer></script>
 
     <!-- Auth -->
     <script type="text/javascript" src="js/auth/signup.js" defer></script>
@@ -62,6 +63,20 @@
     <script type="text/javascript" src="./js/script.js" defer></script>
   </head>
   <body>
+
+  <div id="modal-error" class="modal-background hidden">
+    <div class="modal-content">
+      <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
+      <h2>Error</h2>
+      <div class="modal-error"></div>
+      <form>
+        <div class="submit-button-container">
+          <button class="submit-button">Reload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="app">
 
     <!-- Modals -->

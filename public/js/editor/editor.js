@@ -37,14 +37,14 @@ class Editor extends Component {
 
   async setFile(file, updateFileBar) {
     // Make sure changes to this file are done
-    if (!_.isEmpty(this._file) && !this._fresh && file.id !== this._lastFetchedFile) {
-      await Api.updateFile(this._user.username, this._project.name, this._file.id, this._editor.getValue());
+    if (!_.isEmpty(this._file) && !this._fresh && file.filename !== this._lastFetchedFile) {
+      await Api.updateFile(this._user.username, this._project.name, this._file.filename, this._editor.getValue());
     }
 
     // Ensure we have the latest version
-    Api.getFile(this._user.username, this._project.name, file.id, (latestFile) => {
+    Api.getFile(this._user.username, this._project.name, file.filename, (latestFile) => {
       this._fresh = false;
-      this._lastFetchedFile = latestFile.id;
+      this._lastFetchedFile = latestFile.filename;
       this._file = latestFile;
       if (updateFileBar) this._fileBar.setFile(latestFile);
       this._editor.getSession().setMode(this._getEditorMode());
@@ -85,11 +85,11 @@ class Editor extends Component {
   }
 
   _onEditorChange(event) {
-    if ((event.action !== "insert" && event.action !== "remove") || !this._file.id) return;
+    if ((event.action !== "insert" && event.action !== "remove") || !this._file.filename) return;
     const newContents = this._editor.getValue();
     this._file.contents = newContents;
     this._updateLivePreviewCallback();
-    Api.updateFile(this._user.username, this._project.name, this._file.id, newContents);
+    Api.updateFile(this._user.username, this._project.name, this._file.filename, newContents);
   }
 
   _getEditorMode() {

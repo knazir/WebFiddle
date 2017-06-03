@@ -1,13 +1,17 @@
+/* * * * * * * * *
+ * Dependencies  *
+ * * * * * * * * */
 const bodyParser = require("body-parser");
 const express = require("express");
-const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
-const mime = require("mime"); // For determining MIME type of project files
 const cors = require("cors");
 const fs = require("fs");
+const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
+const mime = require("mime"); // For determining MIME type of project files
 
-const MongoClient = require("mongodb").MongoClient;
-const ObjectID = require("mongodb").ObjectID;
 
+/* * * * * * * * * * * * *
+ * Express Server Setup  *
+ * * * * * * * * * * * * */
 const app = express();
 const jsonParser = bodyParser.json();
 
@@ -23,13 +27,28 @@ const router = express.Router({
 app.use(router);
 app.use(slash());
 
+
+/* * * * * * * * *
+ * MongoDB Setup *
+ * * * * * * * * */
+const MongoClient = require("mongodb").MongoClient;
+const ObjectID = require("mongodb").ObjectID;
 let db = null;
+let users = null;
+let projects = null;
+
+
+/* * * * * * * * *
+ * Start Server  *
+ * * * * * * * * */
 async function main() {
   const DATABASE_NAME = "cs193x-db";
   const MONGO_URL = `mongodb://localhost:27017/${DATABASE_NAME}`;
 
   // The "process.env.MONGODB_URI" is needed to work with Heroku.
   db = await MongoClient.connect(process.env.MONGODB_URI || MONGO_URL);
+  users = db.collection("users");
+  projects = db.collection("projects");
 
   // The "process.env.PORT" is needed to work with Heroku.
   const port = process.env.PORT || 3000;
@@ -41,172 +60,42 @@ main();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const PROJECTS = [
-  {
-    id: 1,
-    name: "Simple Project",
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: [
-      {
-        id: `1_1`,
-        type: "html",
-        filename: "index.html",
-        contents: ""
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: "Hello World",
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: [
-      {
-        id: `2_1`,
-        type: "html",
-        filename: "index.html",
-        contents: ""
-      },
-      {
-        id: `2_2`,
-        type: "js",
-        filename: "app.js",
-        contents: ""
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: "HW1",
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: [
-      {
-        id: `3_1`,
-        type: "html",
-        filename: "index.html",
-        contents: ""
-      },
-      {
-        id: `3_2`,
-        type: "css",
-        filename: "main.css",
-        contents: ""
-      }
-    ]
-  },
-  {
-    id: 4,
-    name: "HW2",
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: [
-      {
-        id: `4_1`,
-        type: "html",
-        filename: "index.html",
-        contents: ""
-      },
-      {
-        id: `4_2`,
-        type: "js",
-        filename: "app.js",
-        contents: ""
-      },
-      {
-        id: `4_3`,
-        type: "css",
-        filename: "main.css",
-        contents: ""
-      }
-    ]
-  },
-  {
-    id: 5,
-    name: "HW3",
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: [
-      {
-        id: `5_1`,
-        type: "html",
-        filename: "index.html",
-        contents: ""
-      },
-      {
-        id: `5_2`,
-        type: "js",
-        filename: "app.js",
-        contents: ""
-      },
-      {
-        id: `5_3`,
-        type: "css",
-        filename: "main.css",
-        contents: ""
-      },
-      {
-        id: `5_4`,
-        type: "js",
-        filename: "a.js",
-        contents: ""
-      },
-      {
-        id: `5_5`,
-        type: "js",
-        filename: "b.js",
-        contents: ""
-      },
-      {
-        id: `5_6`,
-        type: "js",
-        filename: "c.js",
-        contents: ""
-      },
-      {
-        id: `5_7`,
-        type: "js",
-        filename: "d.js",
-        contents: ""
-      },
-      {
-        id: `5_8`,
-        type: "js",
-        filename: "reallylongfilenameofdoomandstuff.js",
-        contents: ""
-      },
-      {
-        id: `5_9`,
-        type: "html",
-        filename: "maple.html",
-        contents: ""
-      },
-      {
-        id: `5_10`,
-        type: "css",
-        filename: "tomatosauce.css",
-        contents: ""
-      },
-      {
-        id: `5_11`,
-        type: "js",
-        filename: "duck.js",
-        contents: ""
-      },
-      {
-        id: `5_12`,
-        type: "js",
-        filename: "ace.js",
-        contents: ""
-      }
-    ]
-  }
-];
-
 /* * * * * * * * * * *
  * Helper Functions  *
  * * * * * * * * * * */
+function caseInsensitive(phrase) {
+  return {
+    $regex: new RegExp(phrase, "i")
+  };
+}
+
+function createUser(username) {
+  return {
+    username: username,
+  };
+}
+
+function legalUsername(username) {
+  return !/[^a-zA-Z0-9]/.test(username);
+}
+
+function createProject(username, projectName, files) {
+  return {
+    username: username,
+    name: projectName,
+    createDate: new Date(),
+    files: files
+  };
+}
+
+function createFile(filename, type) {
+  return {
+    filename: filename,
+    type: type,
+    contents: ""
+  };
+}
+
 function getFilenameWithExtension(filename, type) {
   if (type === "html" && !filename.endsWith(".html")) {
     return filename + ".html";
@@ -219,7 +108,7 @@ function getFilenameWithExtension(filename, type) {
   }
 }
 
- function createIndexFile(id, useStarterCode) {
+function createIndexFile(id, useStarterCode) {
   const index = {
     id: id,
     type: "html",
@@ -256,46 +145,61 @@ function createJSFile(id) {
 /* * * * * * * *
  * API Routes  *
  * * * * * * * */
+/*
+ * Create a user object.
+ */
+router.post("/users/signup", async function(req, res) {
+  const username = req.body.username.toLowerCase();
+  if (!legalUsername(username)) {
+    return res.status(400).json({response: "Username must contain only letters and numbers."});
+  }
+
+  const existingUser = await users.findOne({ username });
+  if (existingUser) return res.status(400).json({response: `User "${req.body.username}" already exists.`});
+
+  users.insertOne(createUser(username));
+  res.json({response: "Success"});
+});
 
 /*
- * Get a user object. This user has a brief summary of all their projects
- * without the actual file contents.
+ * Get a user object without any file contents.
  */
-router.get("/users/:username", function(req, res) {
-  const projects = PROJECTS.map((project) => {
-    const result = {};
-    for (const key of Object.keys(project)) {
-      if (key !== "files") result[key] = project[key];
-    }
-    return result;
-  });
+router.post("/users/signin", async function(req, res) {
+  if (!req.body.username) return res.status(400).json({response: "Please specify a username."});
+  const username = req.body.username.toLowerCase();
 
-  const user = {
-    username: req.params.username,
-    projects: projects
-  };
+  const user = await users.findOne({ username });
+  if (!user) return res.status(400).json({response: `User "${username}" does not exist.`});
+  let userProjects = await projects.find({ username }).toArray();
 
+  userProjects.forEach(project => delete project.files);
+  user.projects = userProjects;
   res.json(user);
 });
 
 /*
- * Get project info including file contents.
+ * Get a project object including its file contents.
  */
-router.get("/users/:username/projects/:projectName", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+router.get("/users/:username/projects/:projectName", async function(req, res) {
+  const username = req.params.username.toLowerCase();
+
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
+
   res.json(project);
 });
 
 /*
- * Get a single file from a project by its ID.
+ * Get a single file from a project by its name.
  */
-router.get("/users/:username/projects/:projectName/files/:fileId", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+router.get("/users/:username/projects/:projectName/files/:filename", async function(req, res) {
+  const username = req.params.username.toLowerCase();
 
-  let file = project.files.filter((file) => file.id === req.params.fileId)[0];
-  if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
+
+  let file = project.files.filter(file => file.filename === req.params.filename)[0];
+  if (!file) return res.status(400).json({response: `File "${req.params.filename}" does not exist.`});
 
   res.json(file);
 });
@@ -303,146 +207,156 @@ router.get("/users/:username/projects/:projectName/files/:fileId", function(req,
 /*
  * Create a new project.
  */
-router.post("/users/:username/projects/create", function(req, res) {
+router.post("/users/:username/projects/create", async function(req, res) {
+  const username = req.params.username.toLowerCase();
   if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
-  const existingProject = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
-  if (existingProject) return res.status(400).json({response: `Project ${req.body.projectName} already exists.`});
 
-  const projectId = (Math.floor(Math.random() * 1000000) + 1).toString();
+  const existingProject = await projects.findOne({username: username, name: caseInsensitive(req.body.projectName)});
+  if (existingProject) return res.status(400).json({response: `Project "${req.body.projectName}" already exists.`});
 
-  let files = [createIndexFile(`${projectId}_1`, req.body.useStarterCode)];
+  let files = [createIndexFile(`${existingProject._id}_1`, req.body.useStarterCode)];
   if (req.body.useStarterCode) {
-    files.push(createCSSFile(`${projectId}_2`));
-    files.push(createJSFile(`${projectId}_3`));
+    files.push(createCSSFile(`${existingProject._id}_2`));
+    files.push(createJSFile(`${existingProject._id}_3`));
   }
 
-  const newProject = {
-    id: projectId,
-    name: req.body.projectName,
-    createDate: new Date(),
-    lastModified: new Date(),
-    files: files
-  };
+  const newProjectId = projects.insertOne(createProject(username, req.body.projectName, files));
+  const newProject = await projects.findOne({_id: newProjectId});
 
-  PROJECTS.push(newProject);
   res.json(newProject);
 });
 
 /*
  * Rename a project.
  */
-router.post("/users/:username/projects/rename", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
+router.post("/users/:username/projects/rename", async function(req, res) {
+  const username = req.params.username.toLowerCase();
   if (!req.body.projectName) res.status(400).json({response: "Please specify a project name."});
+
+  const project = await projects.findOne();
   if (!project) return res.status(400).json({response: `Project ${req.body.projectName} does not exist.`});
 
-  const newProject = PROJECTS.fitler((project) => project.name === req.body.newProjectName)[0];
-  if (newProject) return res.status(400).json({response: `Project ${req.body.newProjectName} already exists.`});
+  const existingProject = await projects.findOne({ username: username, name: caseInsensitive(req.body.newProjectName)});
+  if (existingProject) return res.status(400).json({response: `Project "${req.body.newProjectName}" already exists.`});
 
   project.name = req.body.newProjectName;
+  await projects.update({username: username, name: caseInsensitive(req.body.projectName)}, project);
+
   res.json({response: "Success"});
 });
 
 /*
  * Delete a project.
  */
-router.post("/users/:username/projects/delete", function(req, res) {
-  if (!req.body.projectName) return res.status(400).json({response: "Must specify project name."});
-  const project = PROJECTS.filter((project) => project.name === req.body.projectName)[0];
-  if (!project) return res.status(400).json({response: `Project ${req.body.projectName} does not exist.`});
+router.post("/users/:username/projects/delete", async function(req, res) {
+  const username = req.params.username.toLowerCase();
+  if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
 
-  PROJECTS.splice(PROJECTS.indexOf(project), 1);
+  await projects.deleteOne({username: username, name: caseInsensitive(req.body.projectName)});
+
   res.json({response: "Success"});
 });
 
 /*
  * Update the contents of a file for a project.
  */
-router.post("/users/:username/projects/:projectName/files/:fileId/update", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+router.post("/users/:username/projects/:projectName/files/:filename/update", async function(req, res) {
+  const username = req.params.username.toLowerCase();
 
-  const file = project.files.filter((file) => file.id === req.params.fileId)[0];
-  if (!file) return res.status(400).json({response: `Not found: File ${req.params.fileId}`});
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project ${req.params.projectName} does not exist.`});
+
+  const file = project.files.filter(file => file.filename === req.params.filename)[0];
+  if (!file) return res.status(400).json({response: `File "${req.params.filename}" does not exist!`});
 
   file.contents = req.body.contents;
+  await projects.update({username: username, name: caseInsensitive(req.params.projectName)}, project);
+
   res.json({response: "Success"});
 });
 
 /*
  * Create a file in a project.
  */
-router.post("/users/:username/projects/:projectName/files/create", function(req, res) {
+router.post("/users/:username/projects/:projectName/files/create", async function(req, res) {
+  const username = req.params.username.toLowerCase();
+  if (!req.body.filename) return res.status(400).json({response: "Please specify a filename."});
+  if (!req.body.type) return res.status(400).json({response: "Please specify a file type."});
   const filename = getFilenameWithExtension(req.body.filename, req.body.type);
 
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project ${req.params.projectName} does not exist.`});
 
-  if (!req.body.filename) return res.status(400).json({response: "Please specify a filename."});
+  const existingFile = project.files.filter(file => file.filename === filename)[0];
+  if (existingFile) return res.status(400).json({response: `File "${filename}" already exists.`});
 
-  const existingFile = project.files.filter((file) => file.filename === filename)[0];
-  if (existingFile) return res.status(400).json({response: `File ${filename} already exists.`});
-
-  if (!req.body.type) return res.status(400).json({response: "Please specify a file type."});
-
-  const newFile = {
-    id: `${project.id}_${project.files.length + 1}`,
-    type: req.body.type,
-    filename: filename,
-    contents: ""
-  };
-
+  const newFile = createFile(filename, req.body.type);
   project.files.push(newFile);
+  await projects.update({username: username, name: caseInsensitive(req.params.projectName)}, project);
+
   res.json(newFile);
 });
 
 /*
  * Rename a file in a project.
  */
-router.post("/users/:username/projects/:projectName/files/rename", function(req, res) {
+router.post("/users/:username/projects/:projectName/files/rename", async function(req, res) {
+  const username = req.params.username.toLowercase();
+  if (!req.body.filename || !req.body.newFilename) res.status(400).json({response: "Please specify a filename."});
   const newFilename = getFilenameWithExtension(req.body.newFilename, req.body.type);
 
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project ${req.params.projectName} does not exist.`});
 
-  if (!req.body.filename || !req.body.newFilename) res.status(400).json({response: "Please specify a filename."});
-
-  const existingFile = project.files.filter((file) => file.filename === req.body.filename)[0];
+  const existingFile = project.files.filter(file => file.filename === req.body.filename)[0];
   if (!existingFile) return res.status(400).json({response: `File ${filename} does not exist.`});
 
-  const newFile = project.files.filter((file) => file.filename === req.body.newFilename)[0];
-  if (newFile) return res.status(400).json({response: `File ${filename} already exists.`});
+  const newFile = project.files.filter(file => file.filename === req.body.newFilename)[0];
+  if (newFile) return res.status(400).json({response: `File "${filename}" already exists.`});
 
   existingFile.name = newFilename;
+  await projects.update({username: username, name: caseInsensitive(req.params.projectName)}, project);
+
   res.json({response: "Success"});
 });
 
 /*
  * Delete a file from a project.
  */
-router.post("/users/:username/projects/:projectName/files/delete", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
-
+router.post("/users/:username/projects/:projectName/files/delete", async function(req, res) {
+  const username = req.params.username.toLowerCase();
   if (!req.body.filename) res.status(400).json({response: "Please specify a filename."});
 
-  const existingFile = project.files.filter((file) => file.filename === req.body.filename)[0];
-  if (!existingFile) return res.status(400).json({response: `File ${req.body.filename} does not exist.`});
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
+
+  const existingFile = project.files.filter(file => file.filename === req.body.filename)[0];
+  if (!existingFile) return res.status(400).json({response: `File "${req.body.filename}" does not exist.`});
 
   project.files.splice(project.files.indexOf(existingFile), 1);
+  await projects.update({username: username, name: caseInsensitive(req.params.projectName)}, project);
+
   res.json({response: "Success"});
 });
 
 /* * * * * * * * *
- * Project Views *
+ * Project View  *
  * * * * * * * * */
-router.get("/view/:username/:projectName/:filename?/", function(req, res) {
-  const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
-  if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
+router.get("/view/:username/:projectName/:filename?/", async function(req, res) {
+  const username = req.params.username.toLowerCase();
+
+  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
 
   const filename = req.params.filename || "index.html";
   const file = project.files.filter((file) => file.filename === filename)[0];
-  if (!file) return res.status(400).json({response: `Not found: File ${filename}`});
+  if (!file) {
+    let response = `<h4 style="text-align: center">File "${filename}" does not exist.</h4>`;
+    if (filename === "index.html") {
+      response = "<h4 style='text-align: center'>Project does not contain an index.html file.</h4>";
+    }
+    return res.status(404).send(response);
+  }
 
   const type = mime.lookup(filename);
   res.setHeader("Content-Type", type);
