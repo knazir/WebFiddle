@@ -440,7 +440,7 @@ header button:hover {
     width: 100%;
     min-height: 50px;
     background-color: #222222;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .file-tab {
@@ -453,7 +453,7 @@ header button:hover {
     min-width: 100px;
     width: 150px;
     height: 50px;
-    overflow: hidden;
+    overflow: auto;
 
     font-size: 10pt;
     color: #a6a6a6;
@@ -478,13 +478,13 @@ header button:hover {
     align-items: center;
     margin-right: 5px;
     max-width: 95%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .file-tab .filename {
     margin-right: 5px;
     max-width: 95%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 #editor {
@@ -653,7 +653,7 @@ header button:hover {
     height: 25px;
     text-align: center;
     border: solid 1px lightgray;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .file-type-picker {
@@ -754,7 +754,7 @@ header button:hover {
     text-align: center;
     background-color: #f93975;
     border: solid 3px #f93975;
-    overflow: scroll;
+    overflow: auto;
     cursor: pointer;
 }
 
