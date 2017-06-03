@@ -26,14 +26,19 @@ class ProjectList extends Component {
 
     this._user.projects.forEach((project) => {
       const tileElement = ProjectTile.createDomNode();
-      const projectTile = new ProjectTile(tileElement, project, this._selectProjectCallback);
+      const projectTile = new ProjectTile(tileElement, project, this._selectProjectCallback,
+        this._confirmDeleteProject.bind(this), this._deleteProjectCallback.bind(this));
       this._projects.push(projectTile);
       this._projectsElement.appendChild(tileElement);
     });
   }
 
+  _confirmDeleteProject(projectName) {
+    this._projectListHeader._showDeleteProjectModal(projectName);
+  }
+
   _deleteProjectCallback(projectName) {
-    Api.deleteProject(this._user.username, projectName, (response) => {
+    Api.deleteProject(this._user.username, projectName, () => {
       const project = this._user.projects.filter(project => project.name === projectName)[0];
       if (!project) {
         this._projectListHeader.setModalError(`Project ${projectName} does not exist.`);
@@ -41,8 +46,8 @@ class ProjectList extends Component {
       }
       this._user.projects.splice(this._user.projects.indexOf(project), 1);
       this.reset();
-      this._fillProjectsList();
       this._projectListHeader.closeModal();
+      this._fillProjectsList();
     }, (error) => {
       this._projectListHeader.setModalError(error.response);
     });

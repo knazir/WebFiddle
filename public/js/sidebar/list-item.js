@@ -1,8 +1,19 @@
 class ListItem extends Component {
-  constructor(containerElement, file, selectEditorFileCallback) {
+  constructor(containerElement, file, selectEditorFileCallback, deleteFileCallback) {
     super(containerElement);
     this._file = file;
+
+    this._deleteButtonElement = containerElement.querySelector(".delete-file-button");
+    this._deleteButton = new Component(this._deleteButtonElement);
+    this._deleteButtonElement.addEventListener("click", (event) => {
+      event.stopPropagation();
+      deleteFileCallback();
+    });
+
     containerElement.addEventListener("click", () => selectEditorFileCallback(file));
+    containerElement.addEventListener("mouseenter", this._showDeleteButton.bind(this));
+    containerElement.addEventListener("mouseleave", this._hideDeleteButton.bind(this));
+
     containerElement.querySelector("img").src = this._getIconImage(file);
     containerElement.querySelector(".filename").textContent = file.filename;
   }
@@ -30,6 +41,14 @@ class ListItem extends Component {
     }
   }
 
+  _showDeleteButton() {
+    this._deleteButton.show();
+  }
+
+  _hideDeleteButton() {
+    this._deleteButton.hide();
+  }
+
   /* Creates the following DOM element:
    *   <div class="list-item">
    *     <img class="list-icon" />
@@ -40,13 +59,24 @@ class ListItem extends Component {
     const element = document.createElement("div");
     element.classList.add("list-item");
 
+    const fileInfo = document.createElement("div");
+    fileInfo.classList.add("file-info");
+
     const icon = document.createElement("img");
     icon.classList.add("list-icon");
-    element.appendChild(icon);
+    fileInfo.appendChild(icon);
 
     const filename = document.createElement("span");
     filename.classList.add("filename");
-    element.appendChild(filename);
+    fileInfo.appendChild(filename);
+
+    element.appendChild(fileInfo);
+
+    const deleteButton = document.createElement("span");
+    deleteButton.classList.add("delete-file-button");
+    deleteButton.classList.add("hidden");
+    deleteButton.innerHTML = "&times;";
+    element.appendChild(deleteButton);
 
     return element;
   }

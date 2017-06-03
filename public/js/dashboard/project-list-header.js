@@ -2,8 +2,6 @@ class ProjectListHeader extends Component {
   constructor(containerElement, deleteProjectCallback, createProjectCallback) {
     super(containerElement);
 
-    this._deleteProjectButton = containerElement.querySelector("#delete-project");
-    this._deleteProjectButton.addEventListener("click", this._showDeleteProjectModal.bind(this));
     this._deleteProjectModal = new DeleteProjectModal(document.querySelector("#modal-delete-project"),
       deleteProjectCallback);
 
@@ -28,8 +26,8 @@ class ProjectListHeader extends Component {
     this._activeModal.setError(error);
   }
 
-  _showDeleteProjectModal() {
+  _showDeleteProjectModal(projectName) {
     this._activeModal = this._deleteProjectModal;
-    this._deleteProjectModal.show();
+    this._deleteProjectModal.show(projectName);
   }
 }

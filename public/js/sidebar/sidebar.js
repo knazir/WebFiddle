@@ -1,5 +1,5 @@
 class Sidebar extends Component {
-  constructor(containerElement, selectEditorFileCallback) {
+  constructor(containerElement, selectEditorFileCallback, deleteFileCallback) {
     super(containerElement);
 
     this._project = {};
@@ -12,6 +12,7 @@ class Sidebar extends Component {
       this.setFile(file);
       selectEditorFileCallback(file);
     };
+    this._deleteFileCallback = deleteFileCallback;
   }
 
   setFile(file) {
@@ -42,7 +43,8 @@ class Sidebar extends Component {
 
     this._project.files.forEach((file) => {
       const itemElement = ListItem.createDomNode();
-      const item = new ListItem(itemElement, file, this._selectEditorFileCallback);
+      const item = new ListItem(itemElement, file, this._selectEditorFileCallback,
+        () => this._deleteFileCallback(file.filename));
       this._listItems.push(item);
       this._fileTreeElement.appendChild(itemElement);
     })

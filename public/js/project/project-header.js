@@ -14,8 +14,6 @@ class ProjectHeader extends Component {
 
     // Delete File
     this._deleteFileModal = new DeleteFileModal(document.querySelector("#modal-delete-file"), deleteFileCallback);
-    this._deleteFileButton = containerElement.querySelector("#delete-file");
-    this._deleteFileButton.addEventListener("click", this.showDeleteFileModal.bind(this));
 
     // Line Wrap
     this._toggleLineWrap = new CheckboxItem(containerElement.querySelector("#line-wrap-toggle"),
@@ -57,9 +55,9 @@ class ProjectHeader extends Component {
     this._createFileModal.show();
   }
 
-  showDeleteFileModal() {
+  showDeleteFileModal(filename) {
     this._activeModal = this._deleteFileModal;
-    this._deleteFileModal.show();
+    this._deleteFileModal.show(filename);
   }
 
   showShareModal() {

@@ -90,11 +90,12 @@
         <h2>Delete Project</h2>
         <div class="modal-error"></div>
         <form>
-          <div class="text-input-field">
+          <div class="text-input-field hidden">
             <input type="text" name="name" placeholder="Project Name"/>
           </div>
           <div class="submit-button-container">
-            <button class="submit-button">Delete</button>
+            <button class="do-not-delete submit-button">No</button>
+            <button class="confirm-delete submit-button">Yes</button>
           </div>
         </form>
       </div>
@@ -133,11 +134,12 @@
         <h2>Delete File</h2>
         <div class="modal-error"></div>
         <form>
-          <div class="text-input-field">
+          <div class="text-input-field hidden">
             <input type="text" name="name" placeholder="Filename"/>
           </div>
           <div class="submit-button-container">
-            <button class="submit-button">Delete</button>
+            <button class="do-not-delete submit-button">No</button>
+            <button class="confirm-delete submit-button">Yes</button>
           </div>
         </form>
       </div>
@@ -205,7 +207,6 @@
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
           <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
-          <button id="delete-project"><img class="button-icon" src="./images/delete_project.png" /> Delete Project</button>
         </div>
       </header>
       <div class="projects"></div>
@@ -217,7 +218,6 @@
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
           <button id="create-file">Create File</button>
-          <button id="delete-file">Delete File</button>
           <span id="line-wrap-toggle" class="checkbox-header-item">
             <input type="checkbox" checked />Wrap Lines
           </span>
