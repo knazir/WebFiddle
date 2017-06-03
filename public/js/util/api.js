@@ -53,6 +53,10 @@ class Api {
     return Api._post(`/users/${username}/projects/create`, onSuccess, onFailure, { projectName, useStarterCode })
   }
 
+  static renameProject(username, projectName, newProjectName, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/rename`, onSuccess, onFailure, { projectName, newProjectName });
+  }
+
   static deleteProject(username, projectName, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/delete`, onSuccess, onFailure, { projectName });
   }
@@ -60,6 +64,11 @@ class Api {
   static createFile(username, projectName, filename, type, onSuccess, onFailure) {
     return Api._post(`/users/${username}/projects/${projectName}/files/create`, onSuccess, onFailure,
       { filename, type })
+  }
+
+  static renameFile(username, projectName, filename, newFilename, type, onSuccess, onFailure) {
+    return Api._post(`/users/${username}/projects/${projectName}/rename`, onSuccess, onFailure,
+      { filename, newFilename });
   }
 
   static deleteFile(username, projectName, filename, onSuccess, onFailure) {
