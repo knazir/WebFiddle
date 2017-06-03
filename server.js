@@ -378,7 +378,7 @@ router.post("/users/:username/projects/:projectName/files/create", function(req,
   const project = PROJECTS.filter((project) => project.name === req.params.projectName)[0];
   if (!project) return res.status(400).json({response: `Not found: Project ${req.params.projectName}`});
 
-  if (!req.body.filename) res.status(400).json({response: "Please specify a filename."});
+  if (!req.body.filename) return res.status(400).json({response: "Please specify a filename."});
 
   const existingFile = project.files.filter((file) => file.filename === filename)[0];
   if (existingFile) return res.status(400).json({response: `File ${filename} already exists.`});
