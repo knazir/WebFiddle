@@ -348,10 +348,11 @@ router.post("/users/:username/projects/:projectName/files/delete", async functio
 /* * * * * * * * *
  * Project View  *
  * * * * * * * * */
-router.get("/view/:username/:projectName/:filename?/", async function(req, res) {
-  const username = req.params.username.toLowerCase();
+router.get("/view/:userId/:projectName/:filename?/", async function(req, res) {
+  const user = await users.findOne({_id: new ObjectID(req.params.userId)});
+  if (!user) return res.status(400).json({response: `User does not exist.`});
 
-  const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
+  const project = await projects.findOne({username: user.username, name: caseInsensitive(req.params.projectName)});
   if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
 
   const filename = req.params.filename || "index.html";

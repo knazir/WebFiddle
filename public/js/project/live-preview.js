@@ -49,18 +49,18 @@ class LivePreview extends Component {
   }
 
   getPreviewURL() {
-    let url = `/view/${this._user.username}/${this._project.name}`;
+    let url = `/view/${this._user._id}/${this._project.name}`;
     if (this._file.type === "html" && this._file.filename !== "index.html") url += `/${this._file.filename}`;
     return url;
   }
 
   getShareableURL() {
-    return `${window.location.origin}/view/${this._user.username}/${this._project.name}`;
+    return `${window.location.origin}/view/${this._user._id}/${this._project.name}`;
   }
 
   _trySetup() {
     if (!_.isEmpty(this._user) && !_.isEmpty(this._project) && this._visible) {
-      let src = `/view/${this._user.username}/${this._project.name}`;
+      let src = `/view/${this._user._id}/${this._project.name}`;
       let filename = "index.html";
 
       if (this._file.type === "html" && this._file.filename !== "index.html") {
