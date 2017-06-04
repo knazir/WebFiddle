@@ -8,9 +8,11 @@ class AuthBox extends Component {
   }
 
   async getLoggedIn() {
+    globalLoader.show();
     await Api.initializeAuth();
     await this._setupLoginLogout();
     await this._updateSignedIn();
+    globalLoader.hide();
   }
 
   async _updateSignedIn() {

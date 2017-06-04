@@ -4,10 +4,17 @@ class App extends Component {
 
     this._authBox = new AuthBox(document.querySelector("#auth-box"), this._forceSignInCallback.bind(this),
       this._signinCallback.bind(this));
-    this._projectList = new ProjectList(document.querySelector("#project-list"), this._selectProjectCallback.bind(this));
-    this._projectView = new ProjectView(document.querySelector("#project-view"));
+    this._projectList = new ProjectList(document.querySelector("#project-list"),
+      this._selectProjectCallback.bind(this));
+    this._projectView = new ProjectView(document.querySelector("#project-view"),
+      this._showProjectListCallback.bind(this));
 
     this._authBox.getLoggedIn();
+  }
+
+  _showProjectListCallback() {
+    this._projectView.hide();
+    this._projectList.show();
   }
 
   _forceSignInCallback() {

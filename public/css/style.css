@@ -24,6 +24,27 @@ body {
     background-size: cover;
 }
 
+#global-loader {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/*
+ * Citation: https://www.w3schools.com/howto/howto_css_loader.asp
+ */
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
 .hidden {
     display: none !important;
 }
@@ -200,6 +221,10 @@ body {
 /* * * * * * * * *
  * Project View  *
  * * * * * * * * */
+#project-view img {
+    cursor: pointer;
+}
+
 .project {
     display: flex;
     justify-content: center;
@@ -226,7 +251,7 @@ header {
     align-items: center;
 
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #e9eaeb;
     overflow: hidden;
 }
 
@@ -750,6 +775,11 @@ header button:hover {
 /* * * * * * *
  * Animation *
  * * * * * * */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @keyframes float-up {
     0% {
         margin-top: 100px;

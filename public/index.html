@@ -24,6 +24,7 @@
     <!-- Util -->
     <script type="text/javascript" src="js/util/api.js" defer></script>
     <script type="text/javascript" src="js/util/component.js" defer></script>
+    <script type="text/javascript" src="js/util/global-loader.js" defer></script>
 
     <!-- Modal -->
     <script type="text/javascript" src="js/modal/modal.js" defer></script>
@@ -60,11 +61,12 @@
     <script type="text/javascript" src="js/project/project-view.js" defer></script>
 
     <!-- Main -->
-    <script type="text/javascript" src="./js/app.js" defer></script>
-    <script type="text/javascript" src="./js/script.js" defer></script>
+    <script type="text/javascript" src="js/app.js" defer></script>
+    <script type="text/javascript" src="js/script.js" defer></script>
   </head>
   <body>
 
+  <!-- Global Components -->
   <div id="modal-error" class="modal-background hidden">
     <div class="modal-content">
       <div class="modal-close-button"><span class="positioned-close-button">&times;</span></div>
@@ -77,6 +79,14 @@
       </form>
     </div>
   </div>
+
+  <div id="global-loader">
+    <div class="loader"></div>
+  </div>
+
+  <header id="global-header">
+    <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
+  </header>
 
   <div id="app">
 
@@ -199,7 +209,7 @@
     <!-- Project View -->
     <div id="project-view" class="hidden">
       <header id="project-header">
-        <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
+        <img class="logo" src="./images/logo_long.png" />
         <div class="header-options">
           <span id="line-wrap-toggle" class="checkbox-header-item selected">
             <input type="checkbox" checked />Wrap Lines

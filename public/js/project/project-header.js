@@ -1,11 +1,14 @@
 class ProjectHeader extends Component {
   constructor(containerElement, toggleLineWrapCallback, toggleLivePreviewCallback, openFullPreviewCallback,
-              getShareableLinkCallback, createFileCallback, deleteFileCallback) {
+              getShareableLinkCallback, createFileCallback, deleteFileCallback, showProjectListCallback) {
     super(containerElement);
 
     this._user = {};
     this._project = {};
     this._activeModal = null;
+
+    // Logo
+    containerElement.querySelector(".logo").addEventListener("click", showProjectListCallback);
 
     // Create File
     this._createFileModal = new CreateFileModal(document.querySelector("#modal-create-file"), createFileCallback);

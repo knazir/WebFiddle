@@ -17,7 +17,11 @@ class Api {
 
     const handleError = async function(response) {
       const error = await response.json();
-      onFailure ? onFailure(error) : errorModal.setError(error);
+      if (onFailure) {
+        onFailure(error);
+      } else if (error.status !== 404) {
+        errorModal.setError(error);
+      }
     };
 
     return fetch(path, opts)
@@ -38,6 +42,7 @@ class Api {
    * Authorization *
    * * * * * * * * */
   static async getSignedInUser() {
+    globalLoader.show();
     const auth2 = gapi.auth2.getAuthInstance();
     const loggedIn = auth2.isSignedIn.get();
 
@@ -53,10 +58,12 @@ class Api {
       result.loggedIn = loggedIn;
     }
 
+    globalLoader.hide();
     return result;
   }
 
   static async initializeAuth() {
+    globalLoader.show();
     await new Promise((resolve) => {
       gapi.load("client:auth2", () => {
         resolve();
@@ -67,6 +74,7 @@ class Api {
       client_id: "70088297774-e1akt5l3ou9qms1m7ss1q26q43nvuk48.apps.googleusercontent.com",
       scope: "profile"
     });
+    globalLoader.hide();
   }
 
 
