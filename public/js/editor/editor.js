@@ -23,7 +23,8 @@ class Editor extends Component {
   }
 
   resize(showPreview) {
-    this._containerElement.style.width = showPreview ? "40%" : "";
+    const screenWidth =  (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    this._containerElement.style.width = (showPreview && screenWidth > 700) ? "40%" : "";
     this._editor.resize();
   }
 

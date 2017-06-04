@@ -50,10 +50,13 @@ class ListItem extends Component {
   }
 
   /* Creates the following DOM element:
-   *   <div class="list-item">
-   *     <img class="list-icon" />
+   * <div class="list-item">
+   *   <div class="file-info">
+   *     <img class="list-icon" src="images/file.png">
    *     <span class="filename"></span>
    *   </div>
+   *   <span class="delete-file-button hidden">×</span>
+   * </div>
    */
   static createDomNode() {
     const element = document.createElement("div");
