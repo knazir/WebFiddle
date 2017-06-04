@@ -21,4 +21,9 @@ class ShareModal extends Modal {
   _copyLinkToClipboard() {
     this.setError("Copied link to clipboard.")
   }
+
+  hide() {
+    this.setError("");
+    super.hide();
+  }
 }
