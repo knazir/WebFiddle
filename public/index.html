@@ -4,6 +4,8 @@
     <!-- Metadata -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="google-signin-client_id"
+          content="70088297774-e1akt5l3ou9qms1m7ss1q26q43nvuk48.apps.googleusercontent.com">
     <title>CS193XFiddle</title>
 
     <!-- Stylesheets -->
@@ -34,8 +36,7 @@
     <script type="text/javascript" src="js/modal/error-modal.js" defer></script>
 
     <!-- Auth -->
-    <script type="text/javascript" src="js/auth/signup.js" defer></script>
-    <script type="text/javascript" src="js/auth/signin.js" defer></script>
+    <script src="https://apis.google.com/js/platform.js" defer></script>
     <script type="text/javascript" src="js/auth/auth-box.js" defer></script>
 
     <!-- Dashboard -->
@@ -175,44 +176,11 @@
     </div>
 
     <!-- Authorization -->
-    <div id="auth-box">
+    <div id="auth-box" class="hidden">
       <div id="signin" class="credential-box">
         <img class="logo" src="./images/logo.png" />
-        <form>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/user.png" />
-            <input type="text" name="username" placeholder="Username"/>
-          </div>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/password.png" />
-            <input type="password" name="password" placeholder="Password"/>
-          </div>
-          <button class="submit-button">Log In</button>
-        </form>
-        <div class="form-link">Need an account? <a>Sign Up.</a></div>
-      </div>
-      <div id="signup" class="credential-box hidden">
-        <img class="logo" src="./images/logo.png" />
-        <form>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/user.png" />
-            <input type="text" name="username" placeholder="Username"/>
-          </div>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/password.png" />
-            <input type="password" name="password" placeholder="Password"/>
-          </div>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/password.png" />
-            <input type="password" name="confirm-password" placeholder="Confirm Password"/>
-          </div>
-          <div class="text-input-field">
-            <img class="form-icon" src="./images/email.png" />
-            <input type="email" name="email" placeholder="Email"/>
-          </div>
-          <button class="submit-button">Sign Up</button>
-        </form>
-        <div class="form-link">Already have an account? <a>Log In.</a></div>
+        <h2>CS193XFiddle</h2>
+        <button id="login" class="submit-button">Log In</button>
       </div>
     </div>
 
@@ -222,6 +190,7 @@
         <a href="/"><img class="logo" src="./images/logo_long.png" /></a>
         <div class="header-options">
           <button id="new-project"><img class="button-icon" src="./images/new_project.png" /> New Project</button>
+          <button id="logout">Log Out</button>
         </div>
       </header>
       <div class="projects"></div>

@@ -1,7 +1,7 @@
 {
   "name": "193x-final-project",
   "version": "1.0.0",
-  "description": "CS193X Final Project",
+  "description": "CS193XFiddle",
   "main": "server.js",
   "engines": {
     "node": "7x"
@@ -10,8 +10,10 @@
     "body-parser": "^1.17.1",
     "clipboard": "^1.7.1",
     "cors": "^2.8.3",
+    "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "express-slash": "^2.0.1",
+    "google-auth-library": "^0.10.0",
     "lodash": "^4.17.4",
     "mime": "^1.3.6",
     "mongodb": "^2.2.27",
@@ -21,6 +23,6 @@
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "CS193X Student",
+  "author": "Kashif Nazir",
   "license": "MIT"
 }

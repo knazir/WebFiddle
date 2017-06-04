@@ -39,39 +39,20 @@ body {
     height: 100%;
 }
 
+#auth-box h2 {
+    margin-top: 0;
+    border-bottom: solid 1px lightgray;
+}
+
 #auth-box .logo {
     margin-top: 10px;
-    margin-bottom: 20px;
     width: 100px;
     height: 100px;
 }
 
-#auth-box .form-link {
-    margin-top: 15px;
-}
-
-#auth-box .form-link a {
-    color: #0000ac;
-    cursor: pointer;
-}
-
-#auth-box .form-link a:hover {
-    text-decoration: underline;
-}
-
-
-#auth-box form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    margin-top: 10px;
-    width: 100%;
-}
-
-#auth-box form .submit-button {
+#auth-box .submit-button {
     margin-top: 20px;
+    margin-bottom: 5px;
     padding: 5px 0;
     font-size: 16pt;
     width: 60%;
@@ -831,7 +812,23 @@ header button:hover {
         align-items: center;
     }
 
+    .project-delete-button.hidden {
+        display: flex !important;
+    }
+
     .project-tile {
         width: 40%;
+        height: auto;
+        animation: none;
+        animation-duration: 0s;
+        transition: none !important;
+    }
+
+    .project-tile:hover {
+        width: 40%;
+        height: auto;
+        animation: none;
+        animation-duration: 0s;
+        transition: none !important;
     }
 }

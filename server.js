@@ -7,6 +7,7 @@ const cors = require("cors");
 const fs = require("fs");
 const slash = require("express-slash"); // Middleware to enforce trailing slashes, important for serving projects
 const mime = require("mime"); // For determining MIME type of project files
+const auth = require("./res/google-auth.js");
 
 
 /* * * * * * * * * * * * *
@@ -22,6 +23,14 @@ app.use(cors({ origin: /https?:\/\/(.*\.cs193xfiddle\.herokuapp\.com|localhost)(
 
 const router = express.Router({
   strict: app.get("strict routing")
+});
+
+// Auth
+app.use(async function(req, res, next) {
+  if (req.body.idToken) {
+    req.userInfo = await auth.validateToken(req.body.idToken);
+  }
+  next();
 });
 
 app.use(router);
@@ -63,6 +72,11 @@ main();
 /* * * * * * * * * * *
  * Helper Functions  *
  * * * * * * * * * * */
+async function authorized(req) {
+  const username = req.params.username || req.body.username;
+  return req.userInfo && username === req.userInfo.email;
+}
+
 function caseInsensitive(phrase) {
   return {
     $regex: new RegExp(phrase, "i")
@@ -73,10 +87,6 @@ function createUser(username) {
   return {
     username: username,
   };
-}
-
-function legalUsername(username) {
-  return !/[^a-zA-Z0-9]/.test(username);
 }
 
 function createProject(username, projectName, files) {
@@ -142,21 +152,6 @@ function createJSFile(id) {
 /* * * * * * * *
  * API Routes  *
  * * * * * * * */
-/*
- * Create a user object.
- */
-router.post("/users/signup", async function(req, res) {
-  const username = req.body.username.toLowerCase();
-  if (!legalUsername(username)) {
-    return res.status(400).json({response: "Username must contain only letters and numbers."});
-  }
-
-  const existingUser = await users.findOne({ username });
-  if (existingUser) return res.status(400).json({response: `User "${req.body.username}" already exists.`});
-
-  users.insertOne(createUser(username));
-  res.json({response: "Success"});
-});
 
 /*
  * Get a user object without any file contents.
@@ -165,8 +160,13 @@ router.post("/users/signin", async function(req, res) {
   if (!req.body.username) return res.status(400).json({response: "Please specify a username."});
   const username = req.body.username.toLowerCase();
 
-  const user = await users.findOne({ username });
-  if (!user) return res.status(400).json({response: `User "${username}" does not exist.`});
+  let user = await users.findOne({ username });
+
+  // Create an account if none exists
+  if (!user) {
+    await users.insertOne({ username });
+    user = await users.findOne({ username });
+  }
   let userProjects = await projects.find({ username }).toArray();
 
   userProjects.forEach(project => delete project.files);
@@ -178,6 +178,7 @@ router.post("/users/signin", async function(req, res) {
  * Get a project object including its file contents.
  */
 router.get("/users/:username/projects/:projectName", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
 
   const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
@@ -190,6 +191,7 @@ router.get("/users/:username/projects/:projectName", async function(req, res) {
  * Get a single file from a project by its name.
  */
 router.get("/users/:username/projects/:projectName/files/:filename", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
 
   const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
@@ -205,6 +207,7 @@ router.get("/users/:username/projects/:projectName/files/:filename", async funct
  * Create a new project.
  */
 router.post("/users/:username/projects/create", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
 
@@ -227,6 +230,7 @@ router.post("/users/:username/projects/create", async function(req, res) {
  * Rename a project.
  */
 router.post("/users/:username/projects/rename", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.projectName) res.status(400).json({response: "Please specify a project name."});
 
@@ -246,6 +250,7 @@ router.post("/users/:username/projects/rename", async function(req, res) {
  * Delete a project.
  */
 router.post("/users/:username/projects/delete", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
 
@@ -258,6 +263,7 @@ router.post("/users/:username/projects/delete", async function(req, res) {
  * Update the contents of a file for a project.
  */
 router.post("/users/:username/projects/:projectName/files/:filename/update", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
 
   const project = await projects.findOne({username: username, name: caseInsensitive(req.params.projectName)});
@@ -276,6 +282,7 @@ router.post("/users/:username/projects/:projectName/files/:filename/update", asy
  * Create a file in a project.
  */
 router.post("/users/:username/projects/:projectName/files/create", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.filename) return res.status(400).json({response: "Please specify a filename."});
   if (!req.body.type) return res.status(400).json({response: "Please specify a file type."});
@@ -298,6 +305,7 @@ router.post("/users/:username/projects/:projectName/files/create", async functio
  * Rename a file in a project.
  */
 router.post("/users/:username/projects/:projectName/files/rename", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowercase();
   if (!req.body.filename || !req.body.newFilename) res.status(400).json({response: "Please specify a filename."});
   const newFilename = getFilenameWithExtension(req.body.newFilename, req.body.type);
@@ -321,6 +329,7 @@ router.post("/users/:username/projects/:projectName/files/rename", async functio
  * Delete a file from a project.
  */
 router.post("/users/:username/projects/:projectName/files/delete", async function(req, res) {
+  if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.filename) res.status(400).json({response: "Please specify a filename."});
 
@@ -350,7 +359,7 @@ router.get("/view/:username/:projectName/:filename?/", async function(req, res) 
   if (!file) {
     let response = `<h4 style="text-align: center">404 "${filename}" Not Found</h4>`;
     if (filename === "index.html") {
-      response = "<h4 style='text-align: center'>Project does not contain an index.html file.</h4>";
+      response = "<h4 style='text-align: center'>Project does not contain an index.html file</h4>";
     }
     return res.status(404).send(response);
   }
