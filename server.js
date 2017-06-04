@@ -83,10 +83,8 @@ function caseInsensitive(phrase) {
   };
 }
 
-function createUser(username) {
-  return {
-    username: username,
-  };
+function legalProjectName(projectName) {
+  return /^[a-zA-Z0-9]+$/.test(projectName);
 }
 
 function createProject(username, projectName, files) {
@@ -210,6 +208,9 @@ router.post("/users/:username/projects/create", async function(req, res) {
   if (!authorized(req)) return res.status(401).json({response: "Please log in."});
   const username = req.params.username.toLowerCase();
   if (!req.body.projectName) return res.status(400).json({response: "Please specify a project name."});
+  if (!legalProjectName(req.body.projectName)) {
+    return res.status(400).json({response: "Project name may only contain letters, numbers, and spaces."})
+  }
 
   const existingProject = await projects.findOne({username: username, name: caseInsensitive(req.body.projectName)});
   if (existingProject) return res.status(400).json({response: `Project "${req.body.projectName}" already exists.`});

@@ -37,8 +37,9 @@ class Editor extends Component {
   }
 
   async setFile(file, updateFileBar) {
-    // Make sure changes to this file are done
-    if (!_.isEmpty(this._file) && !this._fresh && file.filename !== this._lastFetchedFile) {
+    // Make sure changes to this file are done and file still exists
+    if (!_.isEmpty(this._file) && !this._fresh && file.filename !== this._lastFetchedFile && this._project
+        && this._project.files.indexOf(this._file) !== -1) {
       await Api.updateFile(this._user.username, this._project.name, this._file.filename, this._editor.getValue());
     }
 

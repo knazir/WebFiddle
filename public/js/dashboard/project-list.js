@@ -49,7 +49,9 @@ class ProjectList extends Component {
       this._projectListHeader.closeModal();
       this._fillProjectsList();
     }, (error) => {
-      this._projectListHeader.setModalError(error.response);
+      const errorMessage = error ? error.response : "Something went wrong.";
+      this._projectListHeader.closeModal();
+      errorModal.setError(errorMessage);
     });
   }
 
@@ -61,7 +63,9 @@ class ProjectList extends Component {
       this._projects.filter(tile => tile.getProject().name === projectName)[0].getContainerElement().click();
       this._projectListHeader.closeModal();
     }, (error) => {
-      this._projectListHeader.setModalError(error.response);
+      const errorMessage = error ? error.response : "Something went wrong.";
+      this._projectListHeader.closeModal();
+      errorModal.setError(errorMessage);
     });
   }
 }

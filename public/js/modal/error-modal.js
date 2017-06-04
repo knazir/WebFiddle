@@ -6,7 +6,8 @@ class ErrorModal extends Modal {
   }
 
   setError(error) {
-    super.setError(error.response ? error.response : error.statusText);
+    const errorMessage = error.response || error.statusText || error;
+    super.setError(errorMessage);
     this.show();
   }
 }

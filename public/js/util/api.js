@@ -1,6 +1,6 @@
 class Api {
   static _checkApiError(response) {
-    return response.status >= 400 && response.status <= 500;
+    return response.status >= 400 && response.status <= 500 && response.status !== 404;
   }
 
   static _json(response) {
@@ -16,7 +16,7 @@ class Api {
     };
 
     const handleError = async function(response) {
-      const error = await response.json();
+      let error = response.json ? await response.json() : response.statusText;
       if (onFailure) {
         onFailure(error);
       } else if (error.status !== 404) {

@@ -91,7 +91,9 @@ class ProjectView extends Component {
       this._selectEditorFileCallback(file);
       this._projectHeader.closeModal();
     }, (error) => {
-      this._projectHeader.setModalError(error.response);
+      const errorMessage = error ? error.response : "Something went wrong.";
+      this._projectHeader.closeModal();
+      errorModal.setError(errorMessage);
     })
   }
 
@@ -100,7 +102,7 @@ class ProjectView extends Component {
   }
 
   _deleteFileCallback(filename) {
-    Api.deleteFile(this._user.username, this._project.name, filename, (reponse) => {
+    Api.deleteFile(this._user.username, this._project.name, filename, () => {
       const file = this._project.files.filter(file => file.filename === filename)[0];
 
       if (!file) {
@@ -109,13 +111,16 @@ class ProjectView extends Component {
       }
 
       this._project.files.splice(this._project.files.indexOf(file), 1);
+
       this._sidebar.fillFileTree();
       this._editor.removeFile(file);
 
       this._projectHeader.closeModal();
       if (this._project.files.length === 0) this._projectHeader.showCreateFileModal();
     }, (error) => {
-      this._projectHeader.setModalError(error.response);
+      const errorMessage = error ? error.response : "Something went wrong.";
+      this._projectHeader.closeModal();
+      errorModal.setError(errorMessage);
     })
   }
 }
