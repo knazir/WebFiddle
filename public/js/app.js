@@ -13,8 +13,10 @@ class App extends Component {
   }
 
   _showProjectListCallback() {
-    this._projectView.hide();
-    this._projectList.show();
+    // TODO: Fix this.
+    // this._projectView.hide();
+    // this._projectView.reset();
+    // this._projectList.show();
   }
 
   _forceSignInCallback() {
