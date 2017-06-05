@@ -844,7 +844,7 @@ header button:hover {
     }
 
     #project-list header .header-options {
-        justify-content: center;
+        justify-content: space-between;
         margin-left: 10px;
         margin-right: 10px;
         width: 100%;
