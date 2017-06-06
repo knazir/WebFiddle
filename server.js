@@ -84,7 +84,7 @@ function caseInsensitive(phrase) {
 }
 
 function legalProjectName(projectName) {
-  return /^[a-zA-Z0-9]+$/.test(projectName);
+  return /^[a-zA-Z0-9 ]+$/.test(projectName);
 }
 
 function createProject(username, projectName, files) {
