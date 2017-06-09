@@ -155,7 +155,7 @@ body {
 
 .project-tile {
     margin: 20px 10px;
-    width: 18%;
+    width: 220px;
     height: 160px;
 
     background: lightgray;
@@ -179,7 +179,7 @@ body {
 }
 
 .project-tile:hover {
-    width: 19%;
+    width: 240px;
     height: 170px;
     background-color: #c0c0c0;
     animation-name: slightly-grow;
@@ -808,24 +808,24 @@ header button:hover {
 
 @keyframes slightly-grow {
     0% {
-        width: 18%;
+        width: 220px;
         height: 160px;
     }
 
     100% {
-        width: 19%;
+        width: 240px;
         height: 170px;
     }
 }
 
 @keyframes slightly-shrink {
     0% {
-        width: 19%;
+        width: 240px;
         height: 170px;
     }
 
     100% {
-        width: 18%;
+        width: 220px;
         height: 160px;
     }
 }
