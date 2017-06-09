@@ -349,14 +349,20 @@ router.post("/users/:username/projects/:projectName/files/delete", async functio
 /* * * * * * * * *
  * Project View  *
  * * * * * * * * */
-router.get("/view/:userId/:projectName/:filename?/", async function(req, res) {
+router.get("/view/:userId/:projectName/:filename*?/", async function(req, res) {
   const user = await users.findOne({_id: new ObjectID(req.params.userId)});
   if (!user) return res.status(400).json({response: `User does not exist.`});
 
   const project = await projects.findOne({username: user.username, name: caseInsensitive(req.params.projectName)});
   if (!project) return res.status(400).json({response: `Project "${req.params.projectName}" does not exist.`});
 
-  const filename = req.params.filename || "index.html";
+  let filename = req.params.filename || "index.html";
+
+  const pathTokens = req.path.split("/");
+  pathTokens.splice(-1, 1); // for trailing /
+  const potentialFilename = decodeURIComponent(pathTokens[pathTokens.length - 1]);
+  if (potentialFilename !== filename && potentialFilename !== req.params.projectName) filename = potentialFilename;
+
   const file = project.files.filter((file) => file.filename === filename)[0];
   if (!file) {
     let response = `<h4 style="text-align: center">404 "${filename}" Not Found</h4>`;
