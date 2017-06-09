@@ -11,10 +11,6 @@ class Editor extends Component {
     this._updateLivePreviewCallback = updateLivePreviewCallback;
     this._fileBar = new FileBar(containerElement.querySelector("#file-bar"), this.setFile.bind(this),
       selectSidebarFileCallback, deselectSidebarFilesCallback);
-
-    window.addEventListener("resize", () => {
-      this.resize(document.querySelector("#live-preview").classList.contains("hidden"))
-    });
   }
 
   reset() {
