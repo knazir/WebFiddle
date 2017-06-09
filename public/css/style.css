@@ -873,7 +873,7 @@ header button:hover {
     }
 
     .project-tile {
-        width: 40%;
+        width: 60%;
         height: auto;
         animation: none;
         animation-duration: 0s;
@@ -881,7 +881,7 @@ header button:hover {
     }
 
     .project-tile:hover {
-        width: 40%;
+        width: 60%;
         height: auto;
         animation: none;
         animation-duration: 0s;
