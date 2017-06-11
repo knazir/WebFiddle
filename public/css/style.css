@@ -756,13 +756,19 @@ header button:hover {
 }
 
 #copy-share-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     margin-bottom: -1px;
     min-width: 20%;
     height: 100%;
+
     text-align: center;
     background-color: #f93975;
     border: solid 3px #f93975;
-    overflow: auto;
+
+    overflow: hidden;
     cursor: pointer;
 }
 
